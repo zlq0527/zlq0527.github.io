@@ -9,7 +9,7 @@
     
     <title>
         
-            MySQL实战45讲总结 |
+            MySQL索引分析_01 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">MySQL实战45讲总结</span>
+            <span class="title-hover-animation">MySQL索引分析_01</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-03-12 16:42:35</span>
-        <span class="mobile">2022-03-12 16:42</span>
+        <span class="pc">2022-03-13 16:03:45</span>
+        <span class="mobile">2022-03-13 16:03</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -208,7 +208,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/MySQL/">MySQL</a>&nbsp;
+                        <a href="/tags/%E7%B4%A2%E5%BC%95/">索引</a>&nbsp;
                     </li>
                 
             </ul>
@@ -218,7 +218,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>296 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>390 Words</span>
         </span>
     
     
@@ -239,25 +239,33 @@
         
 
         <div class="article-content markdown-body">
-            <p>MySQL自增主键</p>
-<p>页分裂 页合并</p>
-<p>回表操作</p>
-<p>二级索引放的数据是主键ID</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h076ybhf1wj20xg0sy773.jpg" alt="image-20220310110220643" style="zoom:50%;" />
+            <blockquote>
+<p>表结构如下</p>
+</blockquote>
+<p>表名为T,主键是id 自增, 新建索引name.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `T` (</span><br><span class="line">  `id` <span class="type">int</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `age` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `adress` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `test` (`name`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">18</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci;</span><br></pre></td></tr></table></figure>
 
-<p>2022-03-10 10:27:44</p>
-<p>MySQL缓存 (8.0以后已经弃用), 对基础表的任何修改 都会使所有的缓存失效,</p>
-<p>如果想要一条SQL命中缓存,需要和之前存入缓存的SQL完全一致,参数顺序不同或 多了空格 都会导致不会命中缓存.</p>
-<p>除非表是一张静态表 没有更新只有查询的需求 可以使用缓存提高效率</p>
-<p>如果没有命中缓存 SQL就来到了解析器 首先进入分析器  进行  词法分析 然后语法分析(看语句是否合法)</p>
-<p>分析器任务完成后, 来到优化器</p>
-<p>优化器的作用是 索引选择 和表连接顺序(join)</p>
-<p>一条查询语句的执行需要经过</p>
-<p>连接器-分析器-优化器-执行器</p>
-<p>连接器(建立连接,权限认证)</p>
-<p>分析器(分析词法,语法是否正确)</p>
-<p>优化器(选择索引和连接方式)</p>
-<p>执行器(执行之前需要看用户有没有对表的查询权限)</p>
+
+
+<h3 id="using-Index"><a href="#using-Index" class="headerlink" title="using Index"></a>using Index</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> id <span class="keyword">from</span> t <span class="keyword">where</span> name <span class="operator">=</span><span class="string">&#x27;lisi&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用了覆盖索引 要查的id 就在name索引的叶子结点上</p>
+<h3 id="using-where"><a href="#using-where" class="headerlink" title="using where"></a>using where</h3><p>在使用索引的情况下,需要回表查询数据</p>
+<h3 id="using-where-amp-using-Index"><a href="#using-where-amp-using-Index" class="headerlink" title="using where &amp; using Index"></a>using where &amp; using Index</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> id <span class="keyword">from</span> t <span class="keyword">where</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;li%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用了索引,所需要的数据在索引列上都能找到, 不需要回表操作</p>
+<h3 id="using-Index-condition"><a href="#using-Index-condition" class="headerlink" title="using Index condition"></a>using Index condition</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">from</span> t <span class="keyword">where</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;li%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>虽然使用了索引,但是还需要回表查询数据</p>
+<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>在MySQL5.6以后引入新特性 索引下推</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX test2 <span class="keyword">ON</span> T (name,age)</span><br><span class="line"></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">from</span> t <span class="keyword">WHERE</span> name <span class="keyword">like</span> <span class="string">&#x27;li%&#x27;</span> <span class="keyword">AND</span> age <span class="operator">=</span><span class="number">10</span> </span><br></pre></td></tr></table></figure>
+
+<p>在MySQL5.6版本以前 上述SQL执行流程:</p>
+<p>因为name和age是联合索引,但是因为name是范围查询(&gt; &lt; between like) 根据name排序之后age索引就失效了 所以就带着id去回表查询age是否复合条件</p>
+<p>和下图(列名不同)但原理相同</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h08d19twpfj21a40o8q4r.jpg" alt="image-20220313170009359"></p>
+<p>MySQL5.6以后引入索引下推SQL执行流程是</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h08d0k6qoxj219y0p6gni.jpg" alt="image-20220313165927674"><br>在根据name查询以后,InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
 
         </div>
 
@@ -267,7 +275,7 @@
             <ul class="post-tags-box">
                 
                     <li class="tag-item">
-                        <a href="/tags/MySQL/">#MySQL</a>&nbsp;
+                        <a href="/tags/%E7%B4%A2%E5%BC%95/">#索引</a>&nbsp;
                     </li>
                 
             </ul>
@@ -276,21 +284,21 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
                            href="/2022/03/12/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/"
                         >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">面试总结</span>
-                                <span class="post-nav-item">Prev posts</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
                             </span>
                         </a>
                     </div>
-                
                 
             </div>
         
@@ -491,7 +499,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-Index"><span class="nav-text">using Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-where"><span class="nav-text">using where</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-where-amp-using-Index"><span class="nav-text">using where &amp; using Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-Index-condition"><span class="nav-text">using Index condition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8"><span class="nav-text">索引下推</span></a></li></ol>
     </div>
 </div>
         </aside>
