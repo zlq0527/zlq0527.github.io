@@ -278,10 +278,9 @@
 </blockquote>
 <p>Callable相比Runnable接口的好处</p>
 <p>Callable接口 有返回值,返回值用FutureTask的get方法接收<br>Callable接口可以抛出异常</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CallTest</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> Integer <span class="title function_">call</span><span class="params">()</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">123</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"><span class="comment">//		new Thread(new Runable1(), &quot;RunnableName&quot;).start();</span></span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask = <span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">CallTest</span>());</span><br><span class="line">		<span class="comment">//lambda表达式优化</span></span><br><span class="line">		FutureTask&lt;String&gt; futureTask1=<span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(()-&gt; <span class="string">&quot;lambda表达式优化&quot;</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">new</span> <span class="title class_">Thread</span>(futureTask1).start();</span><br><span class="line">		System.out.println(<span class="string">&quot;Callable接口(lambda表达式)返回数据&quot;</span>+futureTask1.get());</span><br><span class="line"></span><br><span class="line">		<span class="keyword">new</span> <span class="title class_">Thread</span>(futureTask).start();</span><br><span class="line">		System.out.println(<span class="string">&quot;Callable接口返回数据&quot;</span>+futureTask.get());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CallTest</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> Integer <span class="title function_">call</span><span class="params">()</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">123</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"><span class="comment">//		new Thread(new Runable1(), &quot;RunnableName&quot;).start();</span></span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask = <span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">CallTest</span>());</span><br><span class="line">		<span class="comment">//lambda表达式优化</span></span><br><span class="line">		FutureTask&lt;String&gt; futureTask1=<span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(()-&gt; <span class="string">&quot;lambda表达式优化&quot;</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">new</span> <span class="title class_">Thread</span>(futureTask1).start();</span><br><span class="line">		System.out.println(<span class="string">&quot;Callable接口(lambda表达式)返回数据&quot;</span>+futureTask1.get());</span><br><span class="line"></span><br><span class="line">		<span class="keyword">new</span> <span class="title class_">Thread</span>(futureTask).start();</span><br><span class="line">		System.out.println(<span class="string">&quot;Callable接口返回数据&quot;</span>+futureTask.get());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h09pejnq39j213s09ewfe.jpg" alt="image-20220314205337372"></p>
 <blockquote>
 <p>sleep() 方法 和wait() 方法</p>
 </blockquote>
@@ -452,35 +451,38 @@
         </div>
 
         <div class="page-main-content-bottom">
-            .footer {
-  font-size: 1rem;
-  color: var(--third-text-color);
-
-
-  a {
-    color: var(--third-text-color);
-
-
-    &:hover {
-      color: var(--primary-color);
-
-    }
-  }
-
-  .info-container {
-    padding-bottom: 10px;
-    text-align: center;
-  }
-
-  .info-item {
-    margin: 5px 0;
-  }
-
-  .icon-animate {
-    animation: icon-animate 1.2s ease-in-out infinite;
-  }
-
-}
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Zlq</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
 
         </div>
     </div>
