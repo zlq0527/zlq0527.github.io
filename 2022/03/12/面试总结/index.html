@@ -218,12 +218,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>969 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>1k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>3 Mins</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>4 Mins</span>
         </span>
     
     
@@ -244,12 +244,9 @@
 </blockquote>
 <p>重写是 子类继承父类, 然后子类可以重写父类的方法</p>
 <p>重写时,参数类型,参数个数,方法名都要和被重写的方法完全一致!</p>
-<p>重写时,父类private方法不能被重写(爸爸的隐私,孩子不能看):sunglasses::scream:</p>
+<p>重写时,父类private方法不能被重写(爸爸的隐私,孩子不能看)</p>
 <p>子类重写的方法不能比父类的修饰符更严格</p>
 <p>重载发生在一个类中,方法名相同,参数个数,参数类型,参数顺序 不相同 </p>
-<blockquote>
-<p>MySQL连接查询和联合查询哪个性能更好</p>
-</blockquote>
 <blockquote>
 <p>Redis持久化方式 -RDB和AOF的优缺点</p>
 </blockquote>
@@ -275,6 +272,7 @@
 <p>MySQL表主键是必须的吗</p>
 </blockquote>
 <p>主键不是必须的,简单的表可以不设置主键, 设置主键能提高表的查询效率</p>
+<p>如果定义了主键,innoDB会使用主键作为聚簇索引, 如果没有定义主键,innoDB会选择唯一非空索引作为聚簇索引,如果都没有的话 innoDB会自动生成一个包含了ROW_ID值的列作为聚簇索引,行都会根据这个ROW_ID排序。</p>
 <blockquote>
 <p>callable接口的返回值用什么接收</p>
 </blockquote>
@@ -284,11 +282,6 @@
 
 
 
-
-
-<blockquote>
-<p>左连接和右连接有什么区别</p>
-</blockquote>
 <blockquote>
 <p>sleep() 方法 和wait() 方法</p>
 </blockquote>
@@ -459,38 +452,35 @@
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2022</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Zlq</a>
-        </div>
-        
-            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-            <div class="website-count info-item">
-                
-                    <span id="busuanzi_container_site_uv">
-                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
-                    </span>
-                
-                
-                    <span id="busuanzi_container_site_pv">
-                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
-                    </span>
-                
-            </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
+            .footer {
+  font-size: 1rem;
+  color: var(--third-text-color);
+
+
+  a {
+    color: var(--third-text-color);
+
+
+    &:hover {
+      color: var(--primary-color);
+
+    }
+  }
+
+  .info-container {
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .info-item {
+    margin: 5px 0;
+  }
+
+  .icon-animate {
+    animation: icon-animate 1.2s ease-in-out infinite;
+  }
+
+}
 
         </div>
     </div>
