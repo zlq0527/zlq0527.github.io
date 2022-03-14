@@ -164,34 +164,52 @@
             <div class="main-content">
 
                 
-                    $category-name-font-size = 1.6rem;
+                    <div class="fade-in-down-animation">
+    <div class="category-container">
+        <div class="category-name">
+            <i class="fas fa-folder"></i>&nbsp;MySQL
+        </div>
+        <div class="category-post-list">
+            
+<div class="archive-list-container">
+    
+        <section class="archive-item">
+            <div class="archive-item-header">
+                <span class="archive-year">2022</span>
+                <span class="archive-year-post-count">[2]</span>
+            </div>
+            <ul class="article-list">
+                
+                    <li class="article-item">
+                        <a class="article-title"
+                           href="/2022/03/13/index/"
+                        >MySQL索引分析_01</a>
+                        <span class="article-date">03-13</span>
+                    </li>
+                
+                    <li class="article-item">
+                        <a class="article-title"
+                           href="/2022/03/12/Mysql/"
+                        >MySQL实战45讲总结</a>
+                        <span class="article-date">03-12</span>
+                    </li>
+                
+            </ul>
+        </section>
+    
+</div>
 
-.category-container {
+        </div>
+    </div>
+    <div class="category-paginator">
+        <div class="paginator">
+    
 
-  keep-container(false, 0, 0, 30px, 30px);
+    
+</div>
 
-  .category-name {
-    color: var(--second-text-color);
-    font-size: $category-name-font-size;
-
-    i {
-      color: var(--second-text-color);
-    }
-
-    +keep-tablet() {
-      font-size: $category-name-font-size * 0.9;
-    }
-
-    +keep-mobile() {
-      font-size: $category-name-font-size * 0.8;
-    }
-
-    font-weight: 600;
-    padding-bottom: 20px;
-    margin-bottom: $component-spacing-value;
-    border-bottom: 1px solid var(--border-color);
-  }
-}
+    </div>
+</div>
 
 
                 
@@ -200,38 +218,35 @@
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
-    <div class="info-container">
-        <div class="copyright-info info-item">
-            &copy;
-            
-              <span>2022</span>
-              -
-            
-            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Zlq</a>
-        </div>
-        
-            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-            <div class="website-count info-item">
-                
-                    <span id="busuanzi_container_site_uv">
-                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
-                    </span>
-                
-                
-                    <span id="busuanzi_container_site_pv">
-                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
-                    </span>
-                
-            </div>
-        
-        <div class="theme-info info-item">
-            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
-        </div>
-        
-        
-    </div>
-</footer>
+            .footer {
+  font-size: 1rem;
+  color: var(--third-text-color);
+
+
+  a {
+    color: var(--third-text-color);
+
+
+    &:hover {
+      color: var(--primary-color);
+
+    }
+  }
+
+  .info-container {
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .info-item {
+    margin: 5px 0;
+  }
+
+  .icon-animate {
+    animation: icon-animate 1.2s ease-in-out infinite;
+  }
+
+}
 
         </div>
     </div>
