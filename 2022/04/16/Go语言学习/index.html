@@ -9,7 +9,7 @@
     
     <title>
         
-            线程池参数 |
+            Go语言学习 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">线程池参数</span>
+            <span class="title-hover-animation">Go语言学习</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-04-15 10:43:54</span>
-        <span class="mobile">2022-04-15 10:43</span>
+        <span class="pc">2022-04-16 00:00:28</span>
+        <span class="mobile">2022-04-16 00:00</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -196,29 +196,18 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/JUC/">JUC</a>&nbsp;
+                        <a href="/categories/Go%E8%AF%AD%E8%A8%80/">Go语言</a>&nbsp;
                     </li>
                 
             </ul>
         </span>
     
-    
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">线程池</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>581 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>688 Words</span>
         </span>
     
     
@@ -239,81 +228,56 @@
         
 
         <div class="article-content markdown-body">
-            <p>合理利用线程池能够带来三个好处。</p>
+            <h2 id="Go语言学习笔记"><a href="#Go语言学习笔记" class="headerlink" title="Go语言学习笔记"></a>Go语言学习笔记</h2><h3 id="2022年04月13日"><a href="#2022年04月13日" class="headerlink" title="2022年04月13日"></a>2022年04月13日</h3><p>第一个hello,world程序.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;hello,world&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>一个go文件只属于一个包,go文件的开头必须是 main包下 go 分为两种 ,一种是可执行的包,一种是工具包.工具包不能执行,但是拓展了主应用的功能</p>
+<h4 id="go语言命名规则"><a href="#go语言命名规则" class="headerlink" title="go语言命名规则"></a>go语言命名规则</h4><p>需要对外暴露的变量的名字首字母必须大写,不需要对外暴露的变量名首字母用小写</p>
+<p>包名尽量用小写,尽量不要和标准库的命名冲突,不要用大小写混合或下划线命名</p>
+<h3 id="2022年04月14日"><a href="#2022年04月14日" class="headerlink" title="2022年04月14日"></a>2022年04月14日</h3><p>简短定义变量 变量名:&#x3D;值 这种方式的缺点是</p>
 <ol>
-<li>降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
-<li>提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。</li>
-<li>第三：提高线程的可管理性。</li>
+<li>无法定义数据类型</li>
+<li>只能在函数内部</li>
+<li>定义变量同时显示初始化</li>
 </ol>
-<p>corePoolSize（线程池的基本大小）：当提交一个任务到线程池时，线程池会创建一个线程来执行任务，即使其他空闲的基本线程能够执行新任务也会创建线程，等到需要执行的任务数大于线程池基本大小时就不再创建。如果调用了线程池的prestartAllCoreThreads方法，线程池会提前创建并启动所有基本线程。</p>
-<p>线程池基本工作流程</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1ag5vz9xjj20ym0k875u.jpg" alt="image-20220415153950535"></p>
-<p>首先用ThreadpoolExecutor创建一个新的线程池</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1a9mgfdhmj211a0b80u5.jpg" alt="image-20220415115331397"></p>
-<p>首先,当任务到达时,运行的线程数&lt;corepoolsize,会新建线程,</p>
-<p>如果运行的线程数&gt;&#x3D;corepoolsize,线程会进入队列,而不添加新的线程</p>
-<p>若队列是new ArrayBlockingQueue&lt;&gt;()有界队列,当队列满了之后,再有新的任务到达,此时还没到达maximumpoolsize,就会新建线程,运行任务</p>
-<h2 id="有界队列"><a href="#有界队列" class="headerlink" title="有界队列"></a>有界队列</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayBlockingQueue&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;Integer&gt;(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>var hp int hp:&#x3D;10</p>
+<blockquote>
+<p>报错信息no new variables on left side of :&#x3D;</p>
+</blockquote>
+<p>这样的话程序会报错 因为在第一行hp已经被声明过了</p>
+<p>conn, err :&#x3D; net.Dial(“tcp”, “127.0.0.1:8080”)<br>conn1, err :&#x3D; net.Dial(“tcp”, “127.0.0.1:8080”)<br>在多个简短变量声明和赋值中,至少有一个新的变量出现在左值中</p>
+<h4 id="Swap-a-and-b"><a href="#Swap-a-and-b" class="headerlink" title="Swap a and b"></a>Swap a and b</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">1</span></span><br><span class="line">	b := <span class="number">2</span></span><br><span class="line">	<span class="keyword">var</span> t <span class="type">int</span></span><br><span class="line">	t = a</span><br><span class="line">	a = b</span><br><span class="line">	b = t</span><br><span class="line">	fmt.Println(a)</span><br><span class="line">	fmt.Println(b)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//第二种方法</span></span><br><span class="line">	c := <span class="number">1</span></span><br><span class="line">	d := <span class="number">2</span></span><br><span class="line">	c, d = d, c</span><br><span class="line">	fmt.Println(c)</span><br><span class="line">	fmt.Println(d)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1ag8lu2slj21eo0o2q70.jpg" alt="image-20220415154227311"></p>
-<h2 id="无界队列"><a href="#无界队列" class="headerlink" title="无界队列"></a>无界队列</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LinkedBlockingQueue&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedBlockingQueue</span>&lt;&gt;();  </span><br></pre></td></tr></table></figure>
 
-<p>对于无届队列来说,</p>
-<p>newFixedThreadPool和newSingleThreadExecutor底层用的是无届队列</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1afybwzcaj212g07iwfo.jpg" alt="image-20220415153235058"></p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1afxahiy1j211w08wmyp.jpg" alt="image-20220415153135109"></p>
-<h2 id="特殊的队列"><a href="#特殊的队列" class="headerlink" title="特殊的队列"></a>特殊的队列</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.zlq.SynchronousQueue;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.SynchronousQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @ Author     ：zhaolengquan.</span></span><br><span class="line"><span class="comment"> * @ Date       ：Created in 14:34 2022/4/15</span></span><br><span class="line"><span class="comment"> * @ Description：</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">		SynchronousQueue&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">SynchronousQueue</span>&lt;&gt;();</span><br><span class="line">		<span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;put thread start&quot;</span>);</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				queue.put(<span class="number">1</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">&quot;put thread end&quot;</span>);</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		<span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;take thread start&quot;</span>);</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				System.out.println(<span class="string">&quot;take from putThread: &quot;</span> + queue.take());</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">&quot;take thread end&quot;</span>);</span><br><span class="line">		&#125;);</span><br><span class="line">		thread1.start();</span><br><span class="line">		Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">		thread2.start();</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="2022年04月15日"><a href="#2022年04月15日" class="headerlink" title="2022年04月15日"></a>2022年04月15日</h3><p>匿名变量<br>匿名变量不占用空间,也不会分配内存,多个匿名变量之间没有任何影响<br>定义一个函数getdata()</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getdata</span><span class="params">()</span></span> (<span class="type">int</span>, <span class="type">int</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">10</span>, <span class="number">100</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a,_ :=getdata() <span class="comment">//定义第二个接收值为匿名变量,在后续代码中不能被调用</span></span><br><span class="line">	_,b :=getdata() <span class="comment">//定义第一个接收值为匿名变量</span></span><br><span class="line">	fmt.Println(a)</span><br><span class="line">	fmt.Println(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>先看结果</p>
-<p>put线程执行后就被阻塞了,只有消息被消费后,put线程才可以返回.</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1aegnq35mj214g0a00tp.jpg" alt="image-20220415144100161"></p>
-<p>默认是非公平 也即是栈结构,公平模式下用的是队列结构</p>
-<p>底层实现请前往博客</p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/yanyan19880509/article/details/52562039" >https://blog.csdn.net/yanyan19880509/article/details/52562039<i class="fas fa-external-link-alt"></i></a></p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1ah1k1r7sj215m0eg0uj.jpg" alt="image-20220415161017018"></p>
-<p>newCachedThreadPool底层用的就是这个队列</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1aftwd27zj212209ita3.jpg" alt="image-20220415152819279"></p>
+<p>变量的作用域<br>局部变量 是在函数内声明的变量,<br>局部变量只在函数内有效,函数调用结束后,变量就会被销毁.</p>
+<p>全局变量是在函数外部声明的<br>Go语言函数内可以声明和全局变量相同名称的变量,在使用时,会优先使用函数内的局部变量.</p>
+<p>形式参数</p>
+<p>func test(形式参数)&lt;返回值类型&gt;{<br>    函数体<br>}</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @ Author     ：zhaolengquan.</span></span><br><span class="line"><span class="comment"> * @ Date       ：Created in 23:44 2022/4/15</span></span><br><span class="line"><span class="comment"> * @ Description：</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line">	<span class="keyword">var</span> b = <span class="number">20</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;main()函数中a=%d\n&quot;</span>, a)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;main()函数中b=%d\n&quot;</span>, b)</span><br><span class="line">	c := sum(a, b)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;sum函数的返回值是%d&quot;</span>, c)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sum</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;sum函数中a=%d\n&quot;</span>, a)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;sum函数中b=%d\n&quot;</span>, b)</span><br><span class="line">	<span class="keyword">return</span> a+b</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
 
         </div>
 
         
 
         
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">#线程池</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
 
         
             <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/04/16/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Go语言学习</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
                 
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/04/02/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E8%AF%A6%E8%A7%A3/"
+                           href="/2022/04/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Redis持久化详解</span>
+                                <span class="post-nav-title-item">线程池参数</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -521,7 +485,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E7%95%8C%E9%98%9F%E5%88%97"><span class="nav-text">有界队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E7%95%8C%E9%98%9F%E5%88%97"><span class="nav-text">无界队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E9%98%9F%E5%88%97"><span class="nav-text">特殊的队列</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="nav-text">Go语言学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2022%E5%B9%B404%E6%9C%8813%E6%97%A5"><span class="nav-text">2022年04月13日</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#go%E8%AF%AD%E8%A8%80%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99"><span class="nav-text">go语言命名规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2022%E5%B9%B404%E6%9C%8814%E6%97%A5"><span class="nav-text">2022年04月14日</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Swap-a-and-b"><span class="nav-text">Swap a and b</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2022%E5%B9%B404%E6%9C%8815%E6%97%A5"><span class="nav-text">2022年04月15日</span></a></li></ol></li></ol>
     </div>
 </div>
         </aside>
