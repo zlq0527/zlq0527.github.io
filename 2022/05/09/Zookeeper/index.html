@@ -9,7 +9,7 @@
     
     <title>
         
-            Mysql行锁对性能的影响 |
+            Zookeeper |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">Mysql行锁对性能的影响</span>
+            <span class="title-hover-animation">Zookeeper</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-05-06 09:51:20</span>
-        <span class="mobile">2022-05-06 09:51</span>
+        <span class="pc">2022-05-09 18:04:40</span>
+        <span class="mobile">2022-05-09 18:04</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -196,7 +196,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                        <a href="/categories/zookeeper/">zookeeper</a>&nbsp;
                     </li>
                 
             </ul>
@@ -207,7 +207,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>884 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>626 Words</span>
         </span>
     
     
@@ -228,47 +228,36 @@
         
 
         <div class="article-content markdown-body">
-            <h3 id="怎么减少行锁对性能的影响"><a href="#怎么减少行锁对性能的影响" class="headerlink" title="怎么减少行锁对性能的影响"></a>怎么减少行锁对性能的影响</h3><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220505233558694.png" alt="image-20220505233558694" style="zoom:50%;" />
-
-<p>在一个事务占有行锁时,另外一个事务必须等到第一个事务释放行锁,才能对该行进行操作.</p>
-<p>事务B会一直阻塞,直到事务A完成后释放行锁,</p>
-<p>在innodb事务中,行锁是在需要的时候才加上的,并不是不需要了就立即释放,而是等到事务结束,也即是commit之后才释放,这就是两阶段锁协议</p>
-<p>怎么减少行锁对性能的影响:</p>
-<p>如果一个事务中需要锁多行, 把最有可能发生锁冲突的,影响并发的锁,尽量往后放,比如实现一个电影院的在线交易业务,业务需要设计以下操作</p>
-<ol>
-<li>扣除顾客A的账户余额</li>
-<li>电影院余额加上A购买的票价</li>
-<li>记录日志交易</li>
-</ol>
-<p>完成这笔交易需要更新两条记录,为了保证交易的原子性,需要把这三个操作放在一个事务中,此时如果顾客B也要买电影票,那么事务发生冲突的部分就是语句</p>
-<p>2,修改电影院余额.根据两阶段协议,不论怎么安排语句,行锁都是事务提交之后才释放的,所以,如果把语句2放到最后,按照3,1,2的顺序执行,那么影响影院余</p>
-<p>额行锁的时间就最少,最大限度的减少了事务之间的锁等待,提升了并发度.</p>
-<p>减少锁等待时间也并不能完全解决问题, 这里 还要提到死锁检测</p>
-<p>死锁的四个必要条件</p>
-<ol>
-<li>互斥条件</li>
-<li>请求和保持</li>
-<li>不可剥夺条件</li>
-<li>循环等待</li>
-</ol>
-<img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220506084634051.png" alt="image-20220506084634051" style="zoom:50%;" />
-
-
-
-<p>事务A和事务B都在互相等待对方释放自己需要的行锁,进入了死锁状态,</p>
-<p>这里有两种处理策略</p>
-<ol>
-<li>超时等待,超时时间可以通过参数进行设置 innodb_lock_wait_timeout</li>
-<li>发起死锁检测,发现死锁后,主动回滚死锁链条中的某个事物,让其他事物可以继续执行,参数innodb_deadlock_detect设置为on表示开启死锁检测功能</li>
-</ol>
-<p>innodb中,超时等待时间默认是50秒,如果对于在线服务来说,是不能承受的,所以一般我们使用主动死锁检测,而且innodb_deadlock_detect的默认值本来就是on,也即是开启状态.主动检测死锁,并且快速发现进行处理,也是有额外负担的</p>
-<p>每当一个事务被锁的时候,就要去看它所依赖的线程有没有被别的锁住,如此循环,最后判断是否出现了循环等待,也就是死锁</p>
-<p>每个新来的线程都要判断是否因为自己的加入,导致了死锁,假如有1000个并发线程要同时更新同一行,死锁检测操作就是100万数量级的,虽然最后检测的结果是没有死锁,但期间要消耗大量的CPU资源,就会出现CPU利用率很高,但是每秒却执行不了几个事务的情况.</p>
-<p>避免过度消耗CPU的情况</p>
-<ol>
-<li>如果能确保业务一定不会出现死锁,可以临时把死锁检测关闭</li>
-<li>控制并发度, 使用中间件.对于相同行的更新,在进入引擎之前排队,这样在innodb内部就不会有大量的死锁检测工作了.</li>
-</ol>
+            <p>zookeeper是树形的目录服务,每个节点都被称为ZNode,每个节点都会保存自己的数据和节点信息</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509122913763.png" alt="image-20220509122913763"></p>
+<p>节点可以拥有子节点,也允许少量数据存储在该节点下</p>
+<p>节点分为四大类</p>
+<p>PERSISTENT持久化节点</p>
+<p>EPHEMERAL 临时节点: -e</p>
+<p>PERSISTENT_SEQUENTIAL 持久化顺序节点: -s</p>
+<p>EPHEMERAL_SEQUENTIAL临时顺序节点: -es</p>
+<p>服务端命令</p>
+<p>.&#x2F;zkServer.sh start 开启</p>
+<p>.&#x2F;zkServer.sh stop 停止</p>
+<p>.&#x2F;zkServer.sh status 查看状态</p>
+<p>.&#x2F;zkServer.sh restart 重启</p>
+<p>客户端命令</p>
+<p>.&#x2F;zkCli.sh</p>
+<p>ls &#x2F;    查看根节点下的节点</p>
+<p>ls &#x2F;dubbo 查看根节点下dubbo节点下的节点</p>
+<p>create默认是持久化的节点</p>
+<p>create &#x2F;app1  在根节点下创建app1节点</p>
+<p>get &#x2F;app1 获取数据</p>
+<p>set &#x2F;app1 [数据] 设置节点的数据</p>
+<p>delete &#x2F;app1 删除节点</p>
+<p>create &#x2F;app1&#x2F;p1</p>
+<p>delete all &#x2F;app1   删除带有子节点的节点</p>
+<p>zookeeper的三种Watcher</p>
+<p>NodeCache 只监听某一个特定的节点</p>
+<p>PathChildrenCache 监控一个Znode的子节点</p>
+<p>TreeCache 监控整个树上的所有节点,</p>
+<p>curator Java Api操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">CuratorFramework client;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@BeforeAll</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">RetryPolicy</span> <span class="variable">retryPolicy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ExponentialBackoffRetry</span>(<span class="number">3000</span>, <span class="number">10</span>);</span><br><span class="line"><span class="comment">//    CuratorFramework client = CuratorFrameworkFactory.newClient(&quot;localhost:2181&quot;, retryPolicy);</span></span><br><span class="line"><span class="comment">//    client.start();</span></span><br><span class="line">    client = CuratorFrameworkFactory.builder()</span><br><span class="line">        .connectString(<span class="string">&quot;localhost:2181&quot;</span>)</span><br><span class="line">        .retryPolicy(retryPolicy)</span><br><span class="line">        .namespace(<span class="string">&quot;zlq&quot;</span>)</span><br><span class="line">        .build();</span><br><span class="line">    client.start();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@AfterAll</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (client != <span class="literal">null</span>) &#123;</span><br><span class="line">      client.close();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createNode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//创建临时节点,用withMode,因为创建完之后就关闭会话了所以命令行 ls /zlq 看不到p3节点</span></span><br><span class="line">      <span class="comment">//使用sleep睡眠20秒 会话关闭期间就能看到p3节点</span></span><br><span class="line">      client.create().withMode(CreateMode.EPHEMERAL).forPath(<span class="string">&quot;/p3&quot;</span>);</span><br><span class="line">      Thread.sleep(<span class="number">20</span> * <span class="number">1000</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="comment">//创建多级目录</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createmoreNode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      client.create().creatingParentsIfNeeded().forPath(<span class="string">&quot;/p3/p3.1&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getNode</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">byte</span>[] data = client.getData().forPath(<span class="string">&quot;/p1&quot;</span>);</span><br><span class="line">    System.out.println(<span class="keyword">new</span> <span class="title class_">String</span>(data));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getchildren</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="comment">//查询子节点</span></span><br><span class="line">    List&lt;String&gt; list = client.getChildren().forPath(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">    System.out.println(list);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getstatus</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">Stat</span> <span class="variable">stat</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Stat</span>();</span><br><span class="line">    <span class="type">byte</span>[] bytes = client.getData().storingStatIn(stat).forPath(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">    System.out.println(<span class="string">&quot;-------------------------&quot;</span>);</span><br><span class="line">    System.out.println(<span class="keyword">new</span> <span class="title class_">String</span>(bytes));</span><br><span class="line">    System.out.println(<span class="string">&quot;-------------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="comment">//修改数据</span></span><br><span class="line">    <span class="comment">//根据版本修改.withVersion</span></span><br><span class="line">    <span class="type">Stat</span> <span class="variable">stat</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Stat</span>();</span><br><span class="line">    client.getData().storingStatIn(stat).forPath(<span class="string">&quot;/p1&quot;</span>);</span><br><span class="line">    <span class="type">int</span> <span class="variable">version</span> <span class="operator">=</span> stat.getVersion();</span><br><span class="line">    client.setData().withVersion(version).forPath(<span class="string">&quot;/p1&quot;</span>, <span class="string">&quot;xiugai3&quot;</span>.getBytes());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="comment">//删除单个节点</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">delNode</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    client.delete().forPath(<span class="string">&quot;/p1&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="comment">//递归删除节点 可以删除带有子节点的节点</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">delallNode</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    client.delete().deletingChildrenIfNeeded().forPath(<span class="string">&quot;/p3&quot;</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
         </div>
 
@@ -279,29 +268,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/05/09/Zookeeper/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Zookeeper</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/04/16/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/"
+                           href="/2022/05/06/Mysql%E8%A1%8C%E9%94%81%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Go语言学习</span>
+                                <span class="post-nav-title-item">Mysql行锁对性能的影响</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -509,7 +483,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%87%8F%E5%B0%91%E8%A1%8C%E9%94%81%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">怎么减少行锁对性能的影响</span></a></li></ol>
+        
     </div>
 </div>
         </aside>
