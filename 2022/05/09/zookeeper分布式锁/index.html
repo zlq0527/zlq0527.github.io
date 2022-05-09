@@ -9,7 +9,7 @@
     
     <title>
         
-            MySQL索引分析_01 |
+            Zookeeper分布式锁 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">MySQL索引分析_01</span>
+            <span class="title-hover-animation">Zookeeper分布式锁</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-03-13 16:03:45</span>
-        <span class="mobile">2022-03-13 16:03</span>
+        <span class="pc">2022-05-09 18:26:17</span>
+        <span class="mobile">2022-05-09 18:26</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -196,34 +196,23 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                        <a href="/categories/zookeeper/">zookeeper</a>&nbsp;
                     </li>
                 
             </ul>
         </span>
     
-    
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E7%B4%A2%E5%BC%95/">索引</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>390 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>840 Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>2 Mins</span>
         </span>
     
     
@@ -239,74 +228,53 @@
         
 
         <div class="article-content markdown-body">
-            <blockquote>
-<p>表结构如下</p>
-</blockquote>
-<p>表名为T,主键是id 自增, 新建索引name.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `T` (</span><br><span class="line">  `id` <span class="type">int</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `age` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `adress` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `test` (`name`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">18</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="using-Index"><a href="#using-Index" class="headerlink" title="using Index"></a>using Index</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> id <span class="keyword">from</span> t <span class="keyword">where</span> name <span class="operator">=</span><span class="string">&#x27;lisi&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>使用了覆盖索引 要查的id 就在name索引的叶子结点上</p>
-<h3 id="using-where"><a href="#using-where" class="headerlink" title="using where"></a>using where</h3><p>在使用索引的情况下,需要回表查询数据</p>
-<h3 id="using-where-amp-using-Index"><a href="#using-where-amp-using-Index" class="headerlink" title="using where &amp; using Index"></a>using where &amp; using Index</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> id <span class="keyword">from</span> t <span class="keyword">where</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;li%&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>使用了索引,所需要的数据在索引列上都能找到, 不需要回表操作</p>
-<h3 id="using-Index-condition"><a href="#using-Index-condition" class="headerlink" title="using Index condition"></a>using Index condition</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">from</span> t <span class="keyword">where</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;li%&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>虽然使用了索引,但是还需要回表查询数据</p>
-<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>在MySQL5.6以后引入新特性 索引下推</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX test2 <span class="keyword">ON</span> T (name,age)</span><br><span class="line"></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">from</span> t <span class="keyword">WHERE</span> name <span class="keyword">like</span> <span class="string">&#x27;li%&#x27;</span> <span class="keyword">AND</span> age <span class="operator">=</span><span class="number">10</span> </span><br></pre></td></tr></table></figure>
-
-<p>在MySQL5.6版本以前 上述SQL执行流程:</p>
-<p>因为name和age是联合索引,但是因为name是范围查询(&gt; &lt; between like) 根据name排序之后age索引就失效了 所以就带着id去回表查询age是否复合条件</p>
-<p>和下图(列名不同)但原理相同</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h08d19twpfj21a40o8q4r.jpg" alt="image-20220313170009359"></p>
-<p>MySQL5.6以后引入索引下推SQL执行流程是</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h08d0k6qoxj219y0p6gni.jpg" alt="image-20220313165927674"><br>在根据name查询以后,InnoDB 在 (name,age) 索引内部就判断了 age 是否等于 10，对于不等于 10 的记录，直接判断并跳过。在我们的这个例子中，只需要对 ID4、ID5 这两条记录回表取数据判断，就只需要回表 2 次。</p>
+            <h3 id="分布式锁的抢占过程"><a href="#分布式锁的抢占过程" class="headerlink" title="分布式锁的抢占过程"></a>分布式锁的抢占过程</h3><p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509180904628.png" alt="image-20220509180904628"></p>
+<p>客户端A发起一个加锁请求，先会在你要加锁的node下搞一个临时顺序节点，这一大坨长长的名字都是Curator框架自己生成出来的。</p>
+<p>然后，那个最后一个数字是”1”。因为客户端A是第一个发起请求的，所以给他搞出来的顺序节点的序号是”1”。</p>
+<p>接着客户端A创建完一个顺序节点。还没完，他会查一下”my_lock”这个锁节点下的所有子节点，并且这些子节点是按照序号排序的，这个时候他大概会拿到这么一个集合：</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181051361.png" alt="image-20220509181051361"></p>
+<p>接着,客户端A会做一个关键性的判断,看自己创建的临时顺序节点是否排在第一个,如果是的话,就进行加锁操作.</p>
+<p>因为是第一个创建顺序节点的人,所以就是第一个尝试加分布式锁的人.</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181215218.png" alt="image-20220509181215218"></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>客户端B前来排队</p>
+<p>客户端A已经加完锁了,客户端B想来加锁,先在my_lock这个锁节点下创建一个临时顺序节点,此时名字会变成类似这个<img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181424586.png" alt="image-20220509181424586"></p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181433943.png" alt="image-20220509181433943"></p>
+<p>客户端B因为是第二个来创建顺序节点的，所以zk内部会维护序号为”2”。</p>
+<p>接着客户端B会走加锁判断逻辑，查询”my_lock”锁节点下的所有子节点，按序号顺序排列，此时他看到的类似于：</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181519082.png" alt="image-20220509181519082"></p>
+<p>同时检查自己创建的顺序节点，是不是集合中的第一个？</p>
+<p>明显不是啊，此时第一个是客户端A创建的那个顺序节点，序号为”01”的那个。所以加锁失败！</p>
+<p>客户端B开启监听客户端A</p>
+<p>加锁失败了以后，客户端B就会通过zookeeper的API对他的顺序节点的上一个顺序节点加一个监听器。zookeeper天然就可以实现对某个节点的监听。</p>
+<p>客户端B会对排在他前面的那个节点加一个监听器，监听这个节点是否被删除等变化！大家看下面的图。</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181644856.png" alt="image-20220509181644856"></p>
+<p>接着，客户端A加锁之后，可能处理了一些代码逻辑，然后就会释放锁。那么，释放锁是个什么过程呢？</p>
+<p>其实很简单，就是把自己在zk里创建的那个顺序节点，也就是001节点会被删除</p>
+<p>删除了那个节点之后，zookeeper会负责通知监听这个节点的监听器，也就是客户端B之前加的那个监听器，说：兄弟，你监听的那个节点被删除了，有人释放了锁。</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181839176.png" alt="image-20220509181839176"></p>
+<p>此时客户端B的监听器感知到了上一个顺序节点被删除，也就是排在他之前的某个客户端释放了锁。</p>
+<p>此时，就会通知客户端B重新尝试去获取锁，也就是获取”my_lock”节点下的子节点集合，此时为：</p>
+<p><img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/image-20220509181925400.png" alt="image-20220509181925400"></p>
+<p>集合里此时只有客户端B创建的唯一一个临时顺序节点了.</p>
+<p>然后呢，客户端B判断自己居然是集合中的第一个顺序节点，可以加锁了！直接完成加锁，运行后续的业务代码即可，运行完了之后再次释放锁。</p>
 
         </div>
 
         
 
         
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/tags/%E7%B4%A2%E5%BC%95/">#索引</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
 
         
             <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/03/14/Volatile%E5%85%B3%E9%94%AE%E5%AD%97/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Volatile关键字</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
                 
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/03/12/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/"
+                           href="/2022/05/09/Zookeeper/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">面试总结</span>
+                                <span class="post-nav-title-item">Zookeeper</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -514,7 +482,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-Index"><span class="nav-text">using Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-where"><span class="nav-text">using where</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-where-amp-using-Index"><span class="nav-text">using where &amp; using Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-Index-condition"><span class="nav-text">using Index condition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8"><span class="nav-text">索引下推</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E6%8A%A2%E5%8D%A0%E8%BF%87%E7%A8%8B"><span class="nav-text">分布式锁的抢占过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"></span></a></li></ol>
     </div>
 </div>
         </aside>
