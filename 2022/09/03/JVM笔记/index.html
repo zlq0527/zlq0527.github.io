@@ -9,7 +9,7 @@
     
     <title>
         
-            Bean作用域 |
+            JVM笔记 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">Bean作用域</span>
+            <span class="title-hover-animation">JVM笔记</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-03-17 11:29:29</span>
-        <span class="mobile">2022-03-17 11:29</span>
+        <span class="pc">2022-09-03 10:27:34</span>
+        <span class="mobile">2022-09-03 10:27</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -196,34 +196,23 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/%E6%A1%86%E6%9E%B6/">框架</a>&nbsp;
+                        <a href="/categories/JVM/">JVM</a>&nbsp;
                     </li>
                 
             </ul>
         </span>
     
-    
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/Spring/">Spring</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>153 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.4k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>5 Mins</span>
         </span>
     
     
@@ -239,73 +228,96 @@
         
 
         <div class="article-content markdown-body">
-            <h2 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h2><ol>
-<li>Singleton</li>
-</ol>
-<p>Bean的作用域默认是单例的</p>
-<ol start="2">
-<li>Prototype</li>
-</ol>
-<p>每次创建都会返回一个新的Bean实例</p>
-<ol start="3">
-<li>request 和Session 在web中有效</li>
-</ol>
-<p>request 每次的HTTP请求都会产生一个新的Bean  仅在当前http请求中有效</p>
-<p>Session 每一次来自新 session的HTTP请求都会产生一个新的 bean该bean仅在当前HTTPsession 内有效。</p>
-<p>怎么配置Spring bean 的作用域</p>
+            <p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5t7jxf1ybj20t20oc40n.jpg" alt="img"></p>
+<p>Java中99%的对象放在堆中，堆是垃圾回收主要操作区域。</p>
+<p>新生代分为eden区，survivor1和survivor2区 比例是8：1：1</p>
+<p>新生代的对象在经过15次GC之后进入老年代，大对象直接进入老年代。</p>
+<p>绝大多数最新被创建的对象会分配到新生代，大部分对象在创建之后很快变得不可达，所以很多对象被创建在新生代，然后消失。对象从这个区域消失的过程我们称之为 minor GC。</p>
+<p>老年代</p>
+<p>对象没有变得不可达，并且从新生代中<strong>存活</strong>下来，会被<strong>拷贝</strong>到这里。其所占用的空间要比新生代多。也正由于其相对<strong>较大的空间</strong>，发生在<strong>老年代</strong>上的GC要比<strong>新生代</strong>要<strong>少得多</strong>。对象从<strong>老年代</strong>中消失的过程，可以称之为major GC（或者full GC）。</p>
+<p>永久代</p>
+<h3 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h3><p><strong>JVM</strong>垃圾回收机制</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1pZ4y197KK?p=9&amp;spm_id_from=pageDriver" >https://www.bilibili.com/video/BV1pZ4y197KK?p=9&amp;spm_id_from=pageDriver<i class="fas fa-external-link-alt"></i></a></p>
+<p>JVM内存中线程共享的是堆和本地方法区,</p>
+<p>线程私有的是栈和程序计数器  栈又分为本地方法栈和虚拟机栈</p>
+<p>GC</p>
+<p>minorGC</p>
+<p>minorgc 发生在年轻代</p>
+<p>majorgc发生在老年代</p>
+<p>JVM年轻代分为三个区域</p>
 <ol>
-<li>在XML中配置</li>
+<li>Eden</li>
+<li>Survivor(from)</li>
+<li>Survivor(to)</li>
 </ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;......&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;......&quot;</span>   <span class="attr">scope</span>=<span class="string">&quot;Singleton&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>使用注解@Scope 配置</li>
+<p>Eden和两个Survivor区 默认比例 8:1:1</p>
+<p>为什么要分Eden和Survivor区,</p>
+<p>因为新生代发生的gc比较频繁,如果不分Survivor区,那么Eden发生gc后 存活的对象直接被送到老年代,老年代会很快被填满. 而发生在老年代的Fgc消耗的时间要比ygc长的多.</p>
+<p>设置两个Survivor区最大的好处就是减少了内存的碎片化</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5t7jy5i16j215s0comyi.jpg" alt="img"></p>
+<p>年轻代里的minorgc发生的特别频繁</p>
+<p>新产生的对象大部分都放在Eden区</p>
+<p>新建的对象都放在Eden区中,</p>
+<p>第一次ygc</p>
+<p>Eden区的大部分都会被回收 -&gt;s0</p>
+<p>第二次ygc</p>
+<p>Eden区的和s0活着的对象-&gt;s1</p>
+<p>第三次ygc</p>
+<p>Eden区和s1活着的对象-&gt;s0</p>
+<p>…</p>
+<p>…</p>
+<p>每次换区(s0-&gt;s1&#x2F;s1-&gt;s0)</p>
+<p>对象的年龄都会+1</p>
+<p>多次垃圾回收后, 当对象的年龄到了,就会被放到老年代(Old区)</p>
+<p>再后来, 老年代满了之后 会出发FullGC</p>
+<p>对象分配规则</p>
+<p>大对象直接分配到老年代,避免Eden区和Survivor区大量的内存拷贝</p>
+<p>(动态年龄判断)</p>
+<p>当Survivor区相同年龄的所有对象加起来大于Survivor区的一半 那么大于等于这个年龄的对象可以进入老年代</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h5t7jz43p0j20r20ci76a.jpg" alt="img"></p>
+<p>垃圾回收器</p>
+<p>针对年轻代</p>
+<ol>
+<li>Serial 最基本的,发展历史最悠久的收集器工作环境是单线程, 收集器进行垃圾回收的时候,必须暂停其他所有的工作线程 (Stop The World)<br>几十M &#x2F;几M内存用Serial完全没问题如果内存很大, STW时间会特别长</li>
+<li>Parallel Scavenge<br>并行清理垃圾(多线程) 并不是线程数越高效率越高  ,线程的上下文切换比较消耗资源<br>并行收集::指多个垃圾回收器同时收集垃圾,此时业务逻辑线程暂停工作</li>
+<li>ParNew收集器 Serial收集器的多线程版本, 需要STW,使用的是复制算法</li>
+<li>CMS (concurrent mark sweep)<br>并发垃圾回收用的是标记清除算法,会产生内存碎片<br>这款收集器第一次实现了让垃圾收集线程与用户线程同时工作.<br>CMS的关注点是尽可能缩短垃圾回收时,用户线程的停顿时间.停顿时间越短,越适合与用户交互的系统.<br>JDK1.8以上 CMS建议升级为G1</li>
+<li>Serial Old收集器是Serial收集器的老年代版本, 主要针对老年代,</li>
+<li>Parallel Old收集器： 是Parallel Scavenge收集器的老年代版本，使用多线程，标记-整理算法。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="meta">@Scope(&quot;prototype&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDao</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">hello</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;userdao&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
+<h3 id="常用垃圾回收算法"><a href="#常用垃圾回收算法" class="headerlink" title="常用垃圾回收算法"></a>常用垃圾回收算法</h3><p>标记清除算法</p>
+<p>标记到的垃圾可以直接回收,缺点就是内存碎片化,浪费空间</p>
+<p>这里所谓的清除并不是真的置空,而是把需要清除的对象地址保存在空闲的地址列表里。下次有新对象需要加载时,判断垃圾的位置空间是否够,如果够,就存放。</p>
+<p>缺点 </p>
+<p>需要扫描两遍,效率较低<br>GC的时候需要停止整个应用程序,用户体验感较差</p>
+<p>这种方式清理出来的空闲内存是不连续的,产生内存碎片。需要维护一个空闲列表</p>
+<p>拷贝算法(用在年轻代)</p>
+<p>把一片内存分成大小相等的两块,每次只使用其中的一块,</p>
+<p>当这一块的内存用完了,就把存活的对象复制到另外一块上面,然后把已使用的内存一次清理掉</p>
+<p>优点是 保证了内存的连续可用</p>
+<p>缺点是比较浪费空间(内存只能使用一半) 代价较高.</p>
+<p>标记压缩</p>
+<p>比标记清除多了一步整理,解决碎片化问题</p>
+<p>整理压缩阶段,不是对标记的对象回收, 而是将存活的对象都向一端移动,然后擦除边界以外的内存</p>
+<p>可以看到，标记的存活对象将会被整理，按照内存地址一次排列，而被标记的内存会被清理掉。如此一来，当我们需要给新对象分配内存时，JVM只需要持有一个内存的起始地址即可，这比维护一个空闲列表少开销多了</p>
 
         </div>
 
         
 
         
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/tags/Spring/">#Spring</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
 
         
             <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/03/30/MySQL%E6%96%B0%E5%BB%BA%E7%B4%A2%E5%BC%95%E8%A7%84%E5%88%99/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">MySQL新建索引规则</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
                 
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/03/16/Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"
+                           href="/2022/09/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Nginx负载均衡</span>
+                                <span class="post-nav-title-item">计算机网络读书笔记</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -477,7 +489,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-text">Bean的作用域</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-text">垃圾回收机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">常用垃圾回收算法</span></a></li></ol>
     </div>
 </div>
         </aside>
