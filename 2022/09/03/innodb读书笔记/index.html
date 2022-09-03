@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="zlq_Blog">
+    <meta name="author" content="Zlq">
+    
+    <title>
+        
+            innodb读书笔记 |
+        
+        Yl_blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/css/font-awesome.min.css">
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"zlq0527.github.io","root":"/","language":"en","path":"search.json"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/iTab-0%20(1).png","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"230px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving."},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":true},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Yl_blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">innodb读书笔记</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="https://abc-1307724118.cos.ap-beijing.myqcloud.com/PicGOimg/iTab-0%20(1).png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Zlq</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-09-03 10:19:29</span>
+        <span class="mobile">2022-09-03 10:19</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>5.6k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>20 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p>读书遇到的问题</p>
+<p>有没有一种可能是某一页同时存在flush链表和LRU链表呢？</p>
+<p>p58刷新邻接页</p>
+<p>为什么iops比较高的固态硬盘可以关闭刷新邻接页这个参数呢？而比较老式的机械硬盘建议启用该特性</p>
+<p>p72</p>
+<p>逻辑读是91584次，物理读是19次，从此比例可以看出SQL查询还能优化？物理读在全部的读取次数里面占比已经很低了，为什么还能优化呢?</p>
+<p>p77</p>
+<p>事务在没commit之前，如果是同步写binlog日志，那么数据库宕机回滚的时候，binlog已经记录了事务信息，为什么不能回滚？</p>
+<p>binlog记录了信息的事务也不能回滚吗？</p>
+<p>binlog-cache-size是基于会话的，那如果syc-binlog设置为1，也即是同步写，这样的话binlog-cache-size还会用到吗？是不是事务开启的时候直接写入binlog磁盘了？</p>
+<p>p88</p>
+<p>binlog和redolog的区别</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7biwczjj20uc09rab6.jpg" alt="img"></p>
+<p> 书上说的是二进制文件只在事务提交前进行提交。即只写磁盘一次，77页有一个参数sync-binlog如果是1的话，是同步写磁盘，为什么？</p>
+<h3 id="innodb缓冲池（buffer-pool）"><a href="#innodb缓冲池（buffer-pool）" class="headerlink" title="innodb缓冲池（buffer pool）"></a>innodb缓冲池（buffer pool）</h3><p>innodb缓冲池不仅缓冲索引，还缓冲行记录，自适应哈希索引，插入缓冲，锁，以及其他数据结构。</p>
+<p>很大的缓冲池面临的挑战：预热和关闭会话费更多的时间，如果很多脏页在缓冲池里，innodb关闭之前需要把脏页写会磁盘文件。也可以强制关闭，但重启的时候必须做更多的恢复工作。</p>
+<h3 id="逻辑存储结构"><a href="#逻辑存储结构" class="headerlink" title="逻辑存储结构"></a>逻辑存储结构</h3><p>表空间，段，区，页，行</p>
+<p>一个segment段可以申请4~5个区</p>
+<p>一个区里面又有连续的64页，每个区的大小都是1M，一页的大小是16kb。</p>
+<p>innodb 1.2.x版本之后支持修改页大小，可以修改为8kb、4kb、16kb，那对应的一个区就有128页，256页，32页。修改页大小的参数：innodb_page_size</p>
+<p>新建表的默认大小是 96kb，用的是32个碎片页，碎片页用完之后，才会申请64个连续的页使用。</p>
+<p>innodb一页最多存放的行数是16kb&#x2F;2-200&#x3D;7992行。</p>
+<p>innodb默认行格式compact</p>
+<p>数据库实例的作用之一就是读取页中存放的行记录</p>
+<h3 id="MySQL行格式"><a href="#MySQL行格式" class="headerlink" title="MySQL行格式"></a>MySQL行格式</h3><p>compact行记录格式</p>
+<table>
+<thead>
+<tr>
+<th>变长字段长度列表</th>
+<th>Null标志位</th>
+<th>记录头信息</th>
+<th>列1数据</th>
+<th>列2数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Null标志位记录的是可以为null列的空值情况。</p>
+<p>例如有四列，c1,c2,c3,c4</p>
+<p>c2不能为null，c2不参与null标志位</p>
+<p>有一条记录是eeee,fff,null,null</p>
+<p>c2不参与，那么就是c3,c4为null，又要为倒叙排</p>
+<table>
+<thead>
+<tr>
+<th>c4</th>
+<th>c3</th>
+<th>c1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>不足一个字节前面补0，</p>
+<p>00000110，16进制表示是0x06</p>
+<p>行记录格式如下</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bu2ve4j20jj06074k.jpg" alt="img"></p>
+<p>innodb中null值只在null值列表里存放。</p>
+<p>主键生成策略</p>
+<p>如果表没有主键，会把唯一索引列作为主键，如果还没有的话就使用表默认添加的rowid隐藏列作为主键，</p>
+<p>rowid是在表没有主键和唯一索引列才会定义的。</p>
+<p>char列在未能占满其定义长度的时候会用空格填充，空格的ascii码表示为0x20</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bq833zj20uc09rab6.jpg" alt="img"></p>
+<p>MySQL Varchar类型的最大长度是65535个字节，在latin1编码下，最大支持创建varchar65532大小，并且会出现warning警告，创建完表之后，再查看表信息会发现字段被转换为了TEXT类型</p>
+<p>在GBK编码下最大支持的大小是65532&#x2F;2&#x3D;32767</p>
+<p>UTF-8编码下最大大小是65532&#x2F;3&#x3D;21845</p>
+<p>可以理解varchar（N）N指的是字节长度。</p>
+<p>varchar需要使用1或2个额外字节记录字符串的长度：如果列的最大长度小于或等于255字节，则只使用1个字节表示，否则使用2个字节。假设采用latin1字符集，一个varchar(10)的列需要11个字节的存储空间。varchar(1000)的列则需要1002个字节，因为需要2个字节存储长度信息。</p>
+<p>此外MySQL官方手册定义的65535长度也是指所有的varchar类型和不能超过65535</p>
+<p>例如下图创建varchar类型总和为66000，也会报错的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test2&#123;</span><br><span class="line">a <span class="type">varchar</span>(<span class="number">22000</span>),</span><br><span class="line">b <span class="type">varchar</span>(<span class="number">22000</span>),</span><br><span class="line">c <span class="type">varchar</span>(<span class="number">22000</span>),</span><br><span class="line">&#125; charset<span class="operator">=</span>latin1 engine<span class="operator">=</span>innodb;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果页只能存放一条记录，innodb存储引擎会自动将行数据存放到溢出页中。但是如果可以在一个页中至少放入两行数据，那varchar类型的行数据就不会存放到blob页中，这个阈值的长度是8098，超过阈值，数据页保存768字节，其余的保存在blob页中，768字节是前缀数据，后面是偏移量，指向行溢出页。</p>
+<p>对于text和blob类型，也不一定是插入数据页还是blob页，要看具体情况，</p>
+<p>若建一个blob字段的表，插入四行长度为8000的记录，其实也是存放在数据页中。既然用户使用了blob列类型，一般不会存放这么小的数据，大多数的情况下blob的行数据还是会溢出，实际数据保存在blob页中，数据页存放数据的前768字节。</p>
+<p>mysql5.0之后的默认行格式为Compact ， 5.7之后的默认行格式为dynamic</p>
+<p>compressed和dynamic</p>
+<p>新的行记录格式对于存放在blob中的数据采取了完全的行溢出格式，数据页中只存放20个字节的指针，实际数据全部存放在offpage中。</p>
+<p>compressed的另一个功能是，存储在其中的行数据会以zlib算法进行压缩，对于blob，text，varchar 这类大长度类型的数据能够进行非常有效的存储。</p>
+<p>在UTF-8 CHAR（10）类型的列，最小可以存储10个字节的字符，最大可以存储30字节的字符。 因此对于多字节字符编码的char数据类型的存储，innodb存储引擎在内部将其视为变长字符类型。也意味着变长长度字段列表会记录char数据类型的长度。</p>
+<p>在多字节字符集情况下，char和varchar实际行存储基本是没区别的。</p>
+<h3 id="innodb数据页结构"><a href="#innodb数据页结构" class="headerlink" title="innodb数据页结构"></a>innodb数据页结构</h3><ol>
+<li>file header（记录数据页的头信息）</li>
+<li>page header（记录数据页的状态信息）</li>
+<li>infimum和supremum Record</li>
+<li>User-record</li>
+<li>Free space</li>
+<li>page directory</li>
+<li>file trailer</li>
+</ol>
+<p> file header中的属性</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bkgi2bj21280u077b.jpg" alt="img"></p>
+<p>表空间中每个页</p>
+<p>file header 中的file-type引擎页类型，0x45BF是索引页，也即数据页</p>
+<p>file trailer只有一个fil-page-end-lsn部分，占用8字节，前4字节是该页的checksum校验和的值，后四字节和fileHeader中的fil-page-lsn相同。</p>
+<p>保证数据页从内存刷新到磁盘时数据一致性</p>
+<p>行记录在innodb中的存储格式。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bsz3zkj21ls0k477f.jpg" alt="img"></p>
+<p>heap_no表示当前记录在记录堆的位置信息，heap-no从2开始的原因是还有两条虚拟记录保存在页里面，他们是infimum和supremum。</p>
+<p>他们不保存在User record部分，而是单独在Infimum + Supremum的部分</p>
+<p>record-type 记录类型，0表示普通记录，1表示B+树非叶子结点记录（目录项，存放页最小主键值和页编号），2最小记录，3最大记录</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bkui9ej21q20re434.jpg" alt="img"></p>
+<p>next-record很重要，表示的是当前数据的真实记录到下一条数据真实记录的地址偏移量。</p>
+<p>比方说第一条记录的next_record值为32，意味着从第一条记录的真实数据的地址处向后找32个字节便是下一条记录的真实数据。</p>
+<p>还需要注意的一点是，下一条记录并不是插入顺序的下一条记录，而是按照主键大小顺序的下一条记录，并且规定**<em>infimum*<strong>的下条记录就是本页主键值最小的记录，而本页主键值最大的记录的下记录一条就是</strong></em>Supremum***记录</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7btn3mtj217g0loju9.jpg" alt="img"><br>最大记录的next-record值为0，这些记录按照主键值从小到大的顺序，形成了一个单链表。</p>
+<p>​                                       </p>
+<p>如果删除一条记录路，会发生下面的变化，</p>
+<ol>
+<li>记录并没有从页中删除，而是把delete-mask值设置为1</li>
+<li>next-record为0，表示没有下一条记录</li>
+<li>如果删除的是第二条记录，那么第一条记录的next-record就会指向第三条记录</li>
+<li>最大记录的n-owned值从5变为4（暂时不懂)</li>
+</ol>
+<p>如果删除了一条记录之后再重新插入这条记录，会复用之前的位置。</p>
+<h3 id="page-directory槽"><a href="#page-directory槽" class="headerlink" title="page directory槽"></a>page directory槽</h3><p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bju9q3j20m80b50uf.jpg" alt="img"></p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7blps8kj20l80d90ui.jpg" alt="img"></p>
+<p>在一个数据页中查找指定主键值记录的步骤</p>
+<ol>
+<li>通过二分法确定对应的槽，并找到该槽所在分组主键最小的那条记录。</li>
+<li>通过记录的next-record属性遍历槽所在组的所有记录</li>
+</ol>
+<h3 id="查找一条记录的过程"><a href="#查找一条记录的过程" class="headerlink" title="查找一条记录的过程"></a>查找一条记录的过程</h3><p>如果是根据索引查找，就比较方便，因为slot就是根据主键索引建立的，直接在页目录中使用二分法，定位槽，然后遍历槽就能得到记录。</p>
+<p>如果没有索引，只能从最小记录开始遍历查找，这种效率是非常低的。</p>
+<p>存放记录的页在内存中并不是相邻的，但他们都要保证下一个数据页中用户记录的主键值必须大于上一个页中用户记录的主键值。所以插入数据的时候伴随着一个页分裂的过程。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bmhuawj20b70aogm2.jpg" alt="img"></p>
+<p>假设页中只能存放三条记录，这些记录按照主键值的大小串联成一个单向链表，前后是虚拟页，最大和最小。</p>
+<p>这时再插入一条主键值为4的记录， 因为页中只能存放三条记录，所以不得不再申请一个新的页面：</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bs7myxj20i40773z1.jpg" alt="img"></p>
+<p>新分配的数据页编号可能不是连续的，也就是说我们使用的这些页在存储空间里可能并不挨着，只是维护着一个上一页下一页的编号而建立的链表关系。此外，页10中最大的主键值是5，我们插入的主键值是4，这样就不符合下一个数据页的主键值大于上一个页中用户记录的主键值，所以插入主键值为4的记录伴随着一次记录移动，也就是把主键值为5的记录移动到28页中，然后把主键值为4的记录移动到页10中。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bj4m9xj20qo0zk0yl.jpg" alt="img"></p>
+<p>这个过程表明了我们在对页中的记录进行增删查改操作的时候，必须通过一些比如记录移动的操作来保证这个状态一直成立：下一个数据页的主键值大于上一个页中用户记录的主键值。这个过程可以称之为页分裂。</p>
+<p>我们把每个页中用户记录最小的主键值，都筛选出来，用key表示，保存在自己定义的目录项中。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bn467kj20k00b3t9p.jpg" alt="img"></p>
+<p>这样就可以实现根据主键值快速查找某条记录。<br>这个目录有一个别名，就是索引。</p>
+<p>上面只是索引的简易方案，是我们为了根据主键值进行二分查找时，使用二分快速定位到具体的目录项，而假设所有的目录都可以在物理存储器上连续存储。</p>
+<p>目录项记录和普通记录的不同点</p>
+<ol>
+<li>目录项记录 record-type是1，普通记录的是0</li>
+<li>目录项记录只有主键值和页编号两个列，普通记录的用户记录的列是用户自己定义的，还包含innodb的隐藏列，</li>
+<li>记录头信息中的min-rec-mask，只有在存储目录项信息中的主键值最小的目录项记录的min-rec-mask值为1，其他别的记录的min-rec-mask值是0.</li>
+</ol>
+<p>假设目录项记录也被占满了（虽然目录项记录需要的存储空间比用户记录小多了，但是一页就只有16kb，能存放的目录项记录也是有限的）就会新开数据页存放目录项记录。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bnjwiwj20ul0c3myo.jpg" alt="img"></p>
+<p>因为存储的目录项记录不止一个，所以想要根据主键值查找一条用户记录大致需要3个步骤，以查找主键值为20的记录为例：</p>
+<ol>
+<li>确定目录项页<br>我门现在的目录项页只有两个，页30和页32，因为页30表示的目录项主键范围是[1，320），页32表示的目录项的主键值不小于320，所以主键值为20的记录在页30中。</li>
+<li>通过目录项记录确定用户记录真实所在页。</li>
+<li>在真实存储用户记录的页定位到具体记录。</li>
+</ol>
+<p>在一个存储用户记录的页中通过主键值定位一条用户记录的方式</p>
+<p>当数据非常多的时候，会产生很多的目录项记录的页，怎么快速定位一个存储目录项记录的页呢？ 方法就是再套一层，生成一个更高级的目录，就像多级目录一样。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bquk46j20lo0bljsh.jpg" alt="img"></p>
+<p>随着表记录的增加，目录的层级会继续增加，这就是B+树！</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7brpvz9j20kv0addg6.jpg" alt="img"></p>
+<p>从图中可看出我们的用户记录都存放在B+树的最底层的节点上，这些节点被称为叶子节点上，其余的用来存放目录项的节点，称为非叶子节点。B+树最上面的那个节点称为根节点。</p>
+<h3 id="聚簇索引和非聚簇索引"><a href="#聚簇索引和非聚簇索引" class="headerlink" title="聚簇索引和非聚簇索引"></a>聚簇索引和非聚簇索引</h3><p>聚簇索引只能在搜索条件是主键值时才能发挥作用。因为B+树中的数据都是按照主键进行排序的。</p>
+<p>非聚簇索引也被称为二级索引，普通索引，可以多建几颗B+树，不同的B+树中的数据采用不同的排序规则，如果使用c2列大小进行查找，B+树就要根据c2列进行排序，叶子结点放的记录只有c2列+主键值，目录项存放的是c2列+页号。</p>
+<p>这样我们用普通索引在B+树上查到主键之后还要进行一次回表操作，去主键索引的B+树上查对应的用户记录。</p>
+<p>为什么非聚簇索引的B+树，叶子结点不是直接放用户数据呢？</p>
+<p>因为占用空间太大了。相当于每建立一颗B+树，都要把所有的用户数据再拷贝到新的B+树上，太浪费存储空间。</p>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><p>比如我们想让B+树按照c2和c3列的大小进行排序，需要先把各个记录和页按照c2列进行排序，在记录的c2列相同的情况下，采用c3进行排序。</p>
+<p>同时我们需要注意几点，</p>
+<p>每条目录项记录都由c2，c3，页号这三部分组成，各条记录先按照c2列的值进行排序，如果记录的c2列相同，则按照c3列的值进行排序，</p>
+<p>B+树叶子节点处的用户记录由c2、c3和主键c1列组成。</p>
+<h3 id="索引的代价"><a href="#索引的代价" class="headerlink" title="索引的代价"></a>索引的代价</h3><p>空间代价：</p>
+<p>每建一个索引，就要新建一颗B+树，每颗B+树的每个节点都是一个数据页，一个页默认占用是16kb的存储空间</p>
+<p>时间代价</p>
+<p>每次对表中的数据进行增删查改操作，都需要修改各个B+树索引，数据页之间是双向链表，同一页面中的数据都是按照索引值从小到大的顺序形成的单向链表，增删改会对节点和记录的排序造成破坏，存储引擎需要额外的时间进行记录移位，页面分裂，页面回收等操作来维护好节点和记录的排序。</p>
+<p>where条件进行全值匹配的时候，顺序不影响性能，MySQL查询优化器会进行优化，决定搜索条件使用先后顺序。</p>
+<h3 id="联合索引范围查找"><a href="#联合索引范围查找" class="headerlink" title="联合索引范围查找"></a>联合索引范围查找</h3><p>对于联合索引来说，使用多条件的范围查找，只能使用到第一个索引，比如建立idx_name_birthday_phone_number （name，birthday，phone_number）的联合索引，查询的SQL语句如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> person_info <span class="keyword">WHERE</span> name <span class="operator">&gt;</span> <span class="string">&#x27;Asa&#x27;</span> <span class="keyword">AND</span> name <span class="operator">&lt;</span> <span class="string">&#x27;Barlow&#x27;</span> <span class="keyword">AND</span> birthday <span class="operator">&gt;</span> <span class="string">&#x27;1980-01-01&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>首先根据name值进行范围查找，查找结果是多条不同的记录，对这些name值不同的记录继续通过birthday的条件进行过滤， 而只有name值相同的情况下，birthday才是排序的，这个查询中通过name进行范围查找的记录，并不是根据birthday列进行排序，所以搜索条件只能用到name索引。</p>
+<h3 id="使用联合索引进行排序"><a href="#使用联合索引进行排序" class="headerlink" title="使用联合索引进行排序"></a>使用联合索引进行排序</h3><p>使用order by的时候，只能把记录都加载到内存中，再使用排序算法，有时候查询结果集太大，以至于不能在内存中进行排序，还可能暂时借助磁盘的空间存放中间结果，排序完成后再把排好序的结果集返回客户端。如果order by子句里使用到了索引列，就可能省去了在内存或文件中排序的步骤</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> person_info <span class="keyword">ORDER</span> <span class="keyword">BY</span> name, birthday, phone_number LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>因为我们建立的联合索引就是name，birthday，phone_number，所以orderby排序的时候直接去索引取数据，然后进行回表取出索引中不包含的列，非常的方便。</p>
+<p>注意事项：</p>
+<p>orderby后列的顺序必须按照索引列的顺序，如果顺序混乱，就用不了B+树索引</p>
+<p>如果是最左匹配原则，还是可以使用部分B+树的索引，当联合索引左边列值为常量，也可以使用后面的列进行排序。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> person_info <span class="keyword">WHERE</span> name <span class="operator">=</span> <span class="string">&#x27;A&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> birthday, phone_number LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="回表的代价"><a href="#回表的代价" class="headerlink" title="回表的代价"></a>回表的代价</h3><p>首先使用二级索引查数据的时候，因为数据是按照索引列值从小到大的顺序排放的。集中分布在一个或几个数据页中，可以很快的把连着的数据从磁盘中读取出来，这种读取方式是顺序io，读出的数据，id字段值可能并不相连，在聚簇索引记录是根据id顺序排列的，回表读取的时候，是随机io</p>
+<p>需要回表的记录越多，使用二级索引的性能越低，甚至有些查询宁愿全表扫描也不使用二级索引。</p>
+<p>查询优化器：事先根据查询条件计算回表记录数，记录数越多，越倾向于全表扫描。反之使用二级索引+回表的方式查询。</p>
+<p>使用覆盖索引避免回表操作</p>
+<p>建议在查询列表里只包含索引列，比如</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name, birthday, phone_number <span class="keyword">FROM</span> person_info <span class="keyword">WHERE</span> name <span class="operator">&gt;</span> <span class="string">&#x27;Asa&#x27;</span> <span class="keyword">AND</span> name <span class="operator">&lt;</span> <span class="string">&#x27;Barlow&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>省去了回表操作的性能损耗。</p>
+<h3 id="建立索引考虑因素"><a href="#建立索引考虑因素" class="headerlink" title="建立索引考虑因素"></a>建立索引考虑因素</h3><p>只为出现在where条件，order by，group by子句中出现的列建立索引。查询条件列没必要建立索引</p>
+<p>考虑列的基数：比方说某个列包含值2, 5, 8, 2, 5, 8, 2, 5, 8，虽然有9条记录，但该列的基数却是3。</p>
+<p>在记录行数一定的情况下，列的基数越大，该列中的值越分散，列的基数越小，该列中的值越集中。</p>
+<p>假设某个列的基数为1，也就是所有的记录在该列中的值都一样，那建立索引是没用的，因为所有的值都一样就无法排序，也就无法快速查找。</p>
+<p>索引列类型尽量小</p>
+<ul>
+<li>数据类型越小，查询时进行的比较操作较快（cpu层次）</li>
+<li>数据类型越小，索引占用空间越小，一个数据页就可以放更多的记录，减少磁盘io带来的性能消耗，意味着可以把更多的数据页缓存在内存中，加快读写效率。</li>
+</ul>
+<p>这个建议对于表的主键来说更加适用，因为不仅是聚簇索引中会存储主键值，其他所有的二级索引的节点处都会存储一份记录的主键值，如果主键适用更小的数据类型，也就意味着节省更多的存储空间和更高效的I&#x2F;O。</p>
+<p>索引字符串前缀</p>
+<p>使用utf8字符集存储，编码一个字符需要1-3个字节，字符串长的话占用磁盘空间多，这时建立索引，B+树需要把该列整个字符串都要存储起来， 同时做字符串比较的时候占用更多时间。</p>
+<p>比方说我们在建表语句中只对name列的前10个字符进行索引可以这么写：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> person_info(</span><br><span class="line">  name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  birthday <span class="type">DATE</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  phone_number <span class="type">CHAR</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  country <span class="type">varchar</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  KEY idx_name_birthday_phone_number (name(<span class="number">10</span>), birthday, phone_number)</span><br><span class="line">);  </span><br></pre></td></tr></table></figure>
+
+<p>二级索引不包含完整的name列信息，所以无法对前10个字符相同，后面字符不同的记录进行排序，所以索引列前缀的方式无法使用索引排序。</p>
+<h3 id="索引列参与计算"><a href="#索引列参与计算" class="headerlink" title="索引列参与计算"></a>索引列参与计算</h3><ul>
+<li>WHERE my_col * 2 &lt; 4</li>
+<li>WHERE my_col &lt; 4&#x2F;2</li>
+</ul>
+<p>第一个索引列参与计算，用不到B+树索引</p>
+<p>第二个索引列是单独出现的，可以使用B+树索引。</p>
+<h3 id="为什么引入区的概念"><a href="#为什么引入区的概念" class="headerlink" title="为什么引入区的概念"></a>为什么引入区的概念</h3><p>如果以页的概念管理B+树，分配存储空间，虽然页之间是以双向链表连接，如果链表中相邻的两个页物理空间非常远的话，相当于是随机io，磁盘速度是非常慢的，所以尽量让链表中相邻页物理位置也相邻，这样进行范围查询的时候可以使用顺序io。</p>
+<p>引入区的概念，一个区就是物理位置上连续的64个页，当表数据量大的时候，分配空间就不是按照页，而是按区为单位分配，甚至表数据非常多的时候，可以一次性分配多个连续的区，虽然可能造成空间浪费，但是从性能角度看，消除了很多随机io，功大于过！</p>
+
+        </div>
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/09/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">计算机网络读书笔记</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/05/09/zookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Zookeeper分布式锁</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;Comments</i>
+    </div>
+    
+
+        
+            
+    <div class="valine-container">
+        <script data-pjax
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+        <div id="vcomments"></div>
+        <script data-pjax>
+            function loadValine() {
+                new Valine({
+                    el: '#vcomments',
+                    appId: 'vQ3xzzeCnhUsmhRrlGTJGyCM-gzGzoHsz',
+                    appKey: 'DN18MUIBvLdYsNCwHGeRn9tr',
+                    meta: ['nick', 'mail', 'link'],
+                    avatar: 'wavatar',
+                    enableQQ: true,
+                    placeholder: '😜 尽情吐槽吧~',
+                    lang: 'en'.toLowerCase()
+                });
+
+                function getAuthor(language) {
+                    switch (language) {
+                        case 'en':
+                            return 'Author';
+                        case 'zh-CN':
+                            return '博主';
+                        default:
+                            return 'Master';
+                    }
+                }
+
+                // Add "Author" identify
+                const getValineDomTimer = setInterval(() => {
+                    const vcards = document.querySelectorAll('#vcomments .vcards .vcard');
+                    if (vcards.length > 0) {
+                        let author = 'Zlq';
+
+                        if (author) {
+                            for (let vcard of vcards) {
+                                const vnick_dom = vcard.querySelector('.vhead .vnick');
+                                const vnick = vnick_dom.innerHTML;
+                                if (vnick === author) {
+                                    vnick_dom.innerHTML = `${vnick} <span class="author">${getAuthor(KEEP.hexo_config.language)}</span>`
+                                }
+                            }
+                        }
+                        clearInterval(getValineDomTimer);
+                    } else {
+                        clearInterval(getValineDomTimer);
+                    }
+                }, 2000);
+            }
+
+            if ('true') {
+                const loadValineTimeout = setTimeout(() => {
+                    loadValine();
+                    clearTimeout(loadValineTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadValine);
+            }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Zlq</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#innodb%E7%BC%93%E5%86%B2%E6%B1%A0%EF%BC%88buffer-pool%EF%BC%89"><span class="nav-text">innodb缓冲池（buffer pool）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="nav-text">逻辑存储结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL%E8%A1%8C%E6%A0%BC%E5%BC%8F"><span class="nav-text">MySQL行格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#innodb%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%BB%93%E6%9E%84"><span class="nav-text">innodb数据页结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#page-directory%E6%A7%BD"><span class="nav-text">page directory槽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E4%B8%80%E6%9D%A1%E8%AE%B0%E5%BD%95%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-text">查找一条记录的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-text">聚簇索引和非聚簇索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="nav-text">索引的代价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E8%8C%83%E5%9B%B4%E6%9F%A5%E6%89%BE"><span class="nav-text">联合索引范围查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-text">使用联合索引进行排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E8%A1%A8%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="nav-text">回表的代价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%E8%80%83%E8%99%91%E5%9B%A0%E7%B4%A0"><span class="nav-text">建立索引考虑因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%97%E5%8F%82%E4%B8%8E%E8%AE%A1%E7%AE%97"><span class="nav-text">索引列参与计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%95%E5%85%A5%E5%8C%BA%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-text">为什么引入区的概念</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/dark-light-toggle.js"></script>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/local-search.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/code-copy.js"></script>
+
+
+
+
+<div class="post-scripts pjax">
+    
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/left-side-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/libs/anime.min.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/toc.js"></script>
+    
+</div>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.5/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            KEEP.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>

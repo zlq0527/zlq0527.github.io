@@ -9,7 +9,7 @@
     
     <title>
         
-            Bean作用域 |
+            计算机网络读书笔记 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">Bean作用域</span>
+            <span class="title-hover-animation">计算机网络读书笔记</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-03-17 11:29:29</span>
-        <span class="mobile">2022-03-17 11:29</span>
+        <span class="pc">2022-09-03 10:23:38</span>
+        <span class="mobile">2022-09-03 10:23</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -196,34 +196,23 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/%E6%A1%86%E6%9E%B6/">框架</a>&nbsp;
+                        <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%8E%9F%E7%90%86/">计算机网络原理</a>&nbsp;
                     </li>
                 
             </ul>
         </span>
     
-    
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/Spring/">Spring</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>153 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.7k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>9 Mins</span>
         </span>
     
     
@@ -239,73 +228,108 @@
         
 
         <div class="article-content markdown-body">
-            <h2 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h2><ol>
-<li>Singleton</li>
-</ol>
-<p>Bean的作用域默认是单例的</p>
-<ol start="2">
-<li>Prototype</li>
-</ol>
-<p>每次创建都会返回一个新的Bean实例</p>
-<ol start="3">
-<li>request 和Session 在web中有效</li>
-</ol>
-<p>request 每次的HTTP请求都会产生一个新的Bean  仅在当前http请求中有效</p>
-<p>Session 每一次来自新 session的HTTP请求都会产生一个新的 bean该bean仅在当前HTTPsession 内有效。</p>
-<p>怎么配置Spring bean 的作用域</p>
-<ol>
-<li>在XML中配置</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;......&quot;</span>  <span class="attr">class</span>=<span class="string">&quot;......&quot;</span>   <span class="attr">scope</span>=<span class="string">&quot;Singleton&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>使用注解@Scope 配置</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="meta">@Scope(&quot;prototype&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDao</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">hello</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;userdao&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
+            <h3 id="ARP协议（网络层协议）"><a href="#ARP协议（网络层协议）" class="headerlink" title="ARP协议（网络层协议）"></a>ARP协议（网络层协议）</h3><p>ARP是解决同一局域网上主机或路由器ip地址和硬件地址映射问题。</p>
+<p>知道机器的ip地址，想要找到机器的硬件地址。</p>
+<p>我们知道网络层使用的是ip地址，但实际网络传送数据帧，使用的还是网络的硬件地址。</p>
+<p>每一台主机上都有一个ARP高速缓存，里面有局域网上的各主机和路由器的ip地址到硬件地址的映射表。</p>
+<p>arp请求：源主机向局域网内发送广播，请求内容是（我的ip地址是xxx，硬件地址是xxx，我想知道ip地址是xxx的硬件地址）局域网内所有主机运行的arp进程都会收到这个arp请求。</p>
+<p>若主机B的ip地址和arp请求的目的ip地址相同，就收下这个arp请求分组，并向主机A发送ARP响应分组，同时在响应分组里写入自己的Mac地址。</p>
+<p>arp请求完成后，主机A和B的arp高速缓存都会有对方的ip到物理地址的映射。</p>
+<p>使用高速缓存在两台主机频繁的通信效率提高了很多，但是也要给高速缓存设置个过期时间，如果B更换了网络适配器，其他主机高速缓存里放是之前的物理地址，就会找不到B主机。过了过期时间，B的硬件地址已经被删除了，这时其他主机重新发送arp请求分组，找到B主机。</p>
+<h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><p>通常用于返回的错误信息或是分析路由。ICMP错误消息总是包括了源数据并返回给发送者。 ICMP错误消息的例子之一是TTL值过期。每个路由器在转发数据报的时候都会把IP包头中的TTL值减1。如果TTL值为0，“TTL在传输中过期”的消息将会回报给源地址。 每个ICMP消息都是直接封装在一个IP数据包中的，因此，和UDP一样，ICMP是不可靠的。</p>
+<h3 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h3><p>局域网中的两台计算机可以通过ip协议 分组里的目的地址进行通信，为什么还需要传输层呢？</p>
+<p>从ip层来说，通信两端是两台主机，实际通信的是主机里的进程。ip协议虽然能把分组发送到目的主机，但分组还是停留在主机的网络层而没有交付主机中的应用进程。从传输层的角度看，端到端的通信就是主机的应用进程之间的通信。</p>
+<p>复用和分用</p>
+<p>复用：发送方不同的应用进程可以使用同一个运输层协议传送数据。</p>
+<p>分用：接收方运输层在剥去报文首部后能够把数据正确交付目的应用进程。</p>
+<p>网络层是为主机之间提供逻辑通信，传输层是为应用进程之前提供端到端的逻辑通信。</p>
+<h3 id="ip地址和Mac地址"><a href="#ip地址和Mac地址" class="headerlink" title="ip地址和Mac地址"></a>ip地址和Mac地址</h3><p>ip地址放在ip数据报的首部，ip地址是网络层及以上用的地址，是逻辑地址（软件实现）</p>
+<p>Mac地址是数据链路层和物理层用的地址。</p>
+<p>ip数据报一旦交给了数据链路层，就会封装成Mac帧，Mac帧传送时用的源地址和目的地址都是硬件地址，封装在Mac帧的首部。</p>
+<h3 id="ip数据报格式"><a href="#ip数据报格式" class="headerlink" title="ip数据报格式"></a>ip数据报格式</h3><p>总长度</p>
+<p>总长度指首部和数据之和的长度，在IP层下面的每一种链路层协议都规定了一个数据帧中的数据字段最大长度。这是最大传送单元MTU(Maximum transfer unit)，当一个IP数据报封装成链路层的帧时，数据报的总长度（首部加数据部分）不能超过链路层规定的MTU值。最常用的以太网规定其MTU为1500， 如果传送的数据报长度大于MTU，会进行分片处理。</p>
+<p>标识（16位）</p>
+<p>这个字段主要被用来唯一地标识一个报文的所有分片，因为分片不一定按序到达，所以在重组时需要知道分片所属的报文。每产生一个数据报，计数器加1，并赋值给此字段。一些实验性的工作建议将此字段用于其它目的，例如增加报文跟踪信息以协助探测伪造的源地址。</p>
+<p>标志</p>
+<p>这个3位字段用于控制和识别分片，它们是：</p>
+<ul>
+<li>位0：保留，必须为0；</li>
+<li>位1：禁止分片（Don’t Fragment，DF），当DF&#x3D;0时才允许分片；</li>
+<li>位2：更多分片（More Fragment，MF），MF&#x3D;1代表后面还有分片，MF&#x3D;0 代表已经是最后一个分片。</li>
+</ul>
+<p>如果DF标志被设置为1，但路由要求必须分片报文，此报文会被丢弃。这个标志可被用于发往没有能力组装分片的主机。</p>
+<p>当一个报文被分片，除了最后一片外的所有分片都设置MF为1。最后一个片段具有非零片段偏移字段，将其与未分片数据包区分开，未分片的偏移字段为0。</p>
+<p>分片偏移</p>
+<p>这个13位字段指明了每个分片相对于原始报文开头的偏移量，以8字节作单位。</p>
+<p>TTL字段防止无法交付的数据报一直在因特网中兜圈子（从路由器R1转发到路由器R2，再转发到R3，然后又转发到R1）</p>
+<p>最初的设计是以秒为单位，每经过一个路由器就减去在路由器消耗的一段时间，后来随着科技的进步，路由器处理数据报的时间不断缩短，一般远远小于1秒钟。后来就把TTL字段功能改为跳数限制。路由器在转发数据报之前就把TTL值减1，若TTL值减为0，就丢弃这个数据报，不再转发。 TTL的意义是指明数据报在因特网中最多可经过多少个路由器，TTL占8位，最大就是255。</p>
+<p>若TTL初始值是1，表示这个数据报只能在局域网内传送。因为数据报一传送到某个路由器上，在被转发之前TTL值就减小为0，因而会被这个路由器抛弃。</p>
+<p>首部校验和（16位）</p>
+<p>这个字段只检验数据报首部，不包括数据部分。因为数据报每经过一个路由器，路由器都要重新计算一下首部检验和，不检验数据部分可以减少工作量。通过一种简单的方式检验首部是否发生变化，如果出现差错，丢弃这个数据报。</p>
+<p>MTU和MSS</p>
+<p>MTU由数据链路层提供给网络层的一次传输数据的大小。</p>
+<p>MSS：TCP提交给IP层最大分段大小，假设MTU&#x3D;1500byte，那么MSS&#x3D;1500-20（TCP首部）-20（IP首部）&#x3D;1460byte。</p>
+<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7eqr8hdj21eq0dodhr.jpg" alt="img"></p>
+<h3 id="分片和组装"><a href="#分片和组装" class="headerlink" title="分片和组装"></a>分片和组装</h3><p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7eriz0ij21f90u0gq5.jpg" alt="img"></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/IPv4#%E5%88%86%E7%89%87%E5%92%8C%E7%BB%84%E8%A3%85:~:text=%E8%8E%B7%E5%BE%97%E5%AE%8C%E6%95%B4%E5%88%97%E8%A1%A8%E3%80%82-,%E5%88%86%E7%89%87%E5%92%8C%E7%BB%84%E8%A3%85,-[%E7%BC%96%E8%BE%91]" >维基百科-分片和组装<i class="fas fa-external-link-alt"></i></a></p>
+<h3 id="重组"><a href="#重组" class="headerlink" title="重组"></a>重组</h3><p>当一个接收者发现IP报文的下列项目之一为真时：</p>
+<ul>
+<li>DF标志为0；</li>
+<li>分片偏移量字段不为0。</li>
+</ul>
+<p>它便知道这个报文已被分片，并随即将数据、标识符字段、分片偏移量和更多分片标志一起储存起来。</p>
+<p>当接受者收到了更多分片标志未被设置的分片时，它便知道原始数据载荷的总长。一旦它收齐了所有的分片，它便可以将所有片按照正确的顺序（通过分片偏移量）组装起来，并交给上层协议栈。</p>
+<h3 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h3><p>UDP特点</p>
+<ul>
+<li>一对一，一对多，多对一，多对多</li>
+<li>面向报文，UDP的报文不拆分，添加首部后直接传输给ip层。</li>
+<li>没有流量拥塞控制</li>
+<li>头部占用空间小，8字节（tcp首部最少20字节）</li>
+</ul>
+<p>TCP怎么保证可靠传输</p>
+<p>停止等待协议</p>
+<p>超时重传，超时计数器</p>
+<p>超时重传时间是略大于一个RTT的时间</p>
+<p>如果时间较小，重发的快，可能包没有丢失就重发，导致网络堵塞</p>
+<p>时间较大，重发的慢，可能丢了半天才重发，影响效率</p>
+<p>确认丢失，确认迟到</p>
+<p>发送方未收到接收方的确认时，不知道是自己发送丢失还是接收方的确认丢失，超时器到期后需要重传分组，接收方又收到了重传的分组，应该立即丢弃，不向上层交付。并且向发送方发送确认。</p>
+<p>累计确认</p>
+<p>接收方不必对每一个分组进行确认，而是在收到几个分组后，对按序到达的最后一个分组发送确认。表示到这个分组为止，所有的分组都收到了。</p>
+<p>累计确认的优点：容易实现，即使确认丢失也不必重传，缺点：不能向发送方反应接收方已经正确收到的所有分组信息。</p>
+<p>流量控制</p>
+<h3 id="粘包问题"><a href="#粘包问题" class="headerlink" title="粘包问题"></a>粘包问题</h3><p><a class="link"   target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000039691657" >详细分析TCP粘包<i class="fas fa-external-link-alt"></i></a></p>
+<p>粘包的原因</p>
+<p>要发送的数据小于TCP发送缓冲区大小，TCP将多次写入缓冲区的数据一次发出去。</p>
+<p>接收端应用层没有及时读取接收缓冲区的数据。</p>
+<p>发送端每次发送后都睡眠一定时间，就不会发生粘包 （等待超时，一般为200ms，第一个包没到MSS长度，但是又迟迟等不到第二个包，则立即发送）</p>
+<p>怎么处理粘包</p>
+<p>粘包的原因是不确定消息的边界，只要在发送端每次发送消息的时候给消息带上识别边界的信息，接收端就可以根据消息的边界，区分出每个消息。</p>
+<p>加入特殊标志</p>
+<p>通过特殊的标志作为头尾，比如收到0xfffffe或者回车，认为收到消息头，直到收到下一个头标志或者尾部标记，才认为是一个完整消息</p>
+<p>加入消息长度消息</p>
+<p>收到头标志时，里面还可以带上消息长度，表名之后有多少byte都是属于这个消息。</p>
+<p>因为TCP是基于流的，发的时候就不保证发的是一个完整的数据报，这串字节流在接收端收到时哪怕知道长度也没用，因为它很可能只是某个完整消息的一部分。</p>
+<p>IP层不会有粘包问题，</p>
+<p>消息过长的话IP层会按照MTU的长度把消息分成N个切片，每个切片带有自身在包里的offset和同样的IP头信息。</p>
 
         </div>
 
         
 
         
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/tags/Spring/">#Spring</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
 
         
             <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/03/26/JVM%E5%B8%B8%E7%94%A8%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">JVM垃圾回收算法</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
                 
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/03/16/Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"
+                           href="/2022/09/03/innodb%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Nginx负载均衡</span>
+                                <span class="post-nav-title-item">innodb读书笔记</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -513,7 +537,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-text">Bean的作用域</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP%E5%8D%8F%E8%AE%AE%EF%BC%88%E7%BD%91%E7%BB%9C%E5%B1%82%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="nav-text">ARP协议（网络层协议）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ICMP"><span class="nav-text">ICMP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip%E5%9C%B0%E5%9D%80%E5%92%8CMac%E5%9C%B0%E5%9D%80"><span class="nav-text">ip地址和Mac地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F"><span class="nav-text">ip数据报格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%89%87%E5%92%8C%E7%BB%84%E8%A3%85"><span class="nav-text">分片和组装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E7%BB%84"><span class="nav-text">重组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-text">应用层协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98"><span class="nav-text">粘包问题</span></a></li></ol>
     </div>
 </div>
         </aside>
