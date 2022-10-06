@@ -214,6 +214,70 @@
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2022/10/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
+                        动态代理
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        编译阶段不用关心代理的类，运行阶段才指定代理哪一个对象。
+InvocationHandler接口是JDK提供的动态代理接口，
+自定义动态代理类实现InvocationHandler接口。
+invoke方法是必须实现的，它完成对真实方法的调用，
+给定一...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Oct 06 2022 10:22:46 GMT+0800">2022-10-06</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/10/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/10/06/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+                        微服务架构原理深度解析
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        注册中心与CAP理论Consistency一致性
+Availability可用性
+Partition tolerance 分区容错性
+分区容错性：遇到某节点或网络分区出现故障时，仍然能够对外提供满足一致性和可用性的服务
+，例如X和Y节点出现故障，但仍...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Thu Oct 06 2022 10:20:40 GMT+0800">2022-10-06</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/10/06/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2022/09/03/JVM%E7%AC%94%E8%AE%B0/">
                         JVM笔记
                     </a>
@@ -568,118 +632,6 @@ corePoolSize（线程池的基本大小）...
     </div>
 
     <a href="/2022/04/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/04/02/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E8%AF%A6%E8%A7%A3/">
-                        Redis持久化详解
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        RDB持久化Redis是基于内存的数据库,如果退出进程,数据将会消失,所以我们可以把内存中的数据持久化到磁盘上,下次开启Redis进程的时候,读取磁盘中的数据到内存中,就可以继续正常使用Redis了
-RDB持久化是Redis服务器把数据库当前的状态,...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Apr 02 2022 16:00:44 GMT+0800">2022-04-02</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/Redis/">Redis</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fas fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/Redis/">Redis</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2022/04/02/Redis%E6%8C%81%E4%B9%85%E5%8C%96%E8%AF%A6%E8%A7%A3/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/03/30/MySQL%E6%96%B0%E5%BB%BA%E7%B4%A2%E5%BC%95%E8%A7%84%E5%88%99/">
-                        MySQL新建索引规则
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        索引越多越好吗？索引并不是越多越好，
-
-索引会占用较多的磁盘空间
-创建和维护索引需要耗费时间，而且索引过多会影响其他语句的执行效率
-
-索引的创建
-数据量较少的时候不建议创建索引，如果优化器判断出全表扫描比走索引更高效的时候，就不会选择走索引。
-对查询...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Wed Mar 30 2022 18:57:51 GMT+0800">2022-03-30</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/MySQL/">MySQL</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fas fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E7%B4%A2%E5%BC%95/">索引</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2022/03/30/MySQL%E6%96%B0%E5%BB%BA%E7%B4%A2%E5%BC%95%E8%A7%84%E5%88%99/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>
