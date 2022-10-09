@@ -214,6 +214,120 @@
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2022/10/09/Muti-Range%20Read%EF%BC%88MRR%EF%BC%89%E4%BC%98%E5%8C%96/">
+                        Muti-Range Read（MRR）优化
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        MySQL5.6版本开始支持MRR优化，目的是为了减少磁盘访问，并将磁盘随机访问转化为较为顺序的数据访问。这对IO-bound型的SQL查询语句可带来性能极大的提升。MRR优化可适用于range ref eq_ref类型的查询
+IO bound：如果...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Oct 09 2022 20:53:18 GMT+0800">2022-10-09</span></span>
+        
+            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                        </li>
+                    
+                    
+                </ul>
+            </span>
+        
+        
+    </div>
+
+    <a href="/2022/10/09/Muti-Range%20Read%EF%BC%88MRR%EF%BC%89%E4%BC%98%E5%8C%96/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/10/09/AQS%E5%8E%9F%E7%90%86/">
+                        AQS原理
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        公平锁和非公平锁
+先到临界区的线程比后到的线程一定更快的获取锁（公平锁）
+公平锁就是把竞争的线程放入一个先进先出的队列中，持有锁的线程执行完了，唤醒队列的下一个线程获取锁就好了，
+非公平锁是线程尝试获取锁，如果获取到锁就直接执行，获取不到锁，放入队列...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Oct 09 2022 20:52:56 GMT+0800">2022-10-09</span></span>
+        
+        
+    </div>
+
+    <a href="/2022/10/09/AQS%E5%8E%9F%E7%90%86/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
+                    <a href="/2022/10/09/Redis%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">
+                        Redis多线程模型
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        为什么redis6.0之前不使用多线程?
+使用redis时,几乎不存在cpu成为瓶颈的情况,Redis主要受限于内存和网络
+在Linux系统上,Redis通过pipelining每秒可以处理100万个请求,所以如果应用程序主要使用 O(N) 或O(l...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sun Oct 09 2022 20:52:47 GMT+0800">2022-10-09</span></span>
+        
+            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/categories/Redis/">Redis</a>&nbsp;
+                        </li>
+                    
+                    
+                </ul>
+            </span>
+        
+        
+    </div>
+
+    <a href="/2022/10/09/Redis%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2022/10/06/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
                         动态代理
                     </a>
@@ -489,149 +603,6 @@ PERSI...
     </div>
 
     <a href="/2022/05/09/Zookeeper/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/05/06/Mysql%E8%A1%8C%E9%94%81%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D/">
-                        Mysql行锁对性能的影响
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        怎么减少行锁对性能的影响
-
-在一个事务占有行锁时,另外一个事务必须等到第一个事务释放行锁,才能对该行进行操作.
-事务B会一直阻塞,直到事务A完成后释放行锁,
-在innodb事务中,行锁是在需要的时候才加上的,并不是不需要了就立即释放,而是等到事务结束...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri May 06 2022 09:51:20 GMT+0800">2022-05-06</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/MySQL/">MySQL</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2022/05/06/Mysql%E8%A1%8C%E9%94%81%E5%AF%B9%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/04/16/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/">
-                        Go语言学习
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        Go语言学习笔记2022年04月13日第一个hello,world程序.
-12345678package mainimport &quot;fmt&quot;func main() &#123;	fmt.Println(&quot;hello,wor...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Sat Apr 16 2022 00:00:28 GMT+0800">2022-04-16</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/Go%E8%AF%AD%E8%A8%80/">Go语言</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2022/04/16/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/04/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/">
-                        线程池参数
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        合理利用线程池能够带来三个好处。
-
-降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。
-提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。
-第三：提高线程的可管理性。
-
-corePoolSize（线程池的基本大小）...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Fri Apr 15 2022 10:43:54 GMT+0800">2022-04-15</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/JUC/">JUC</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-            <span class="home-article-tag">
-                <i class="fas fa-tags"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">线程池</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            </span>
-        
-    </div>
-
-    <a href="/2022/04/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>

@@ -9,7 +9,7 @@
     
     <title>
         
-            动态代理 |
+            Muti-Range Read（MRR）优化 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">动态代理</span>
+            <span class="title-hover-animation">Muti-Range Read（MRR）优化</span>
         </div>
 
         
@@ -187,21 +187,32 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-10-06 10:22:46</span>
-        <span class="mobile">2022-10-06 10:22</span>
+        <span class="pc">2022-10-09 20:53:18</span>
+        <span class="mobile">2022-10-09 20:53</span>
     </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
     
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>453 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>924 Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 Mins</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 Mins</span>
         </span>
     
     
@@ -217,24 +228,41 @@
         
 
         <div class="article-content markdown-body">
-            <p>编译阶段不用关心代理的类，运行阶段才指定代理哪一个对象。</p>
-<p>InvocationHandler接口是JDK提供的动态代理接口，</p>
-<p>自定义动态代理类实现InvocationHandler接口。</p>
-<p>invoke方法是必须实现的，它完成对真实方法的调用，</p>
-<p>给定一个接口，动态代理会宣称“已经实现该接口的所有方法了，”动态代理怎么实现被代理接口中的方法呢?</p>
-<p>通过InvocationHandler接口，所有方法都通过Handler处理，即所有被代理的方法都由InvocationHandler接管实际的处理任务。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GamePlayerIH</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">object</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">GamePlayerIH</span><span class="params">(Object object)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.object = object;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="keyword">return</span> method.invoke(object, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">iGamePlayer</span> <span class="variable">gamePlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GamePlayer</span>(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        <span class="type">InvocationHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GamePlayerIH</span>(gamePlayer);</span><br><span class="line">        <span class="type">iGamePlayer</span> <span class="variable">proxyInstance</span> <span class="operator">=</span> (iGamePlayer) Proxy.newProxyInstance(gamePlayer.getClass().getClassLoader(),gamePlayer.getClass().getInterfaces(), handler);</span><br><span class="line">        proxyInstance.login(<span class="string">&quot;zs&quot;</span>,<span class="string">&quot;123&quot;</span>);</span><br><span class="line">        proxyInstance.killBoss();</span><br><span class="line">        proxyInstance.update();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <p>MySQL5.6版本开始支持MRR优化，目的是为了减少磁盘访问，并将磁盘随机访问转化为较为顺序的数据访问。这对IO-bound型的SQL查询语句可带来性能极大的提升。MRR优化可适用于range ref eq_ref类型的查询</p>
+<p>IO bound：如果主要时间消耗在等待读写数据而CPU利用率很低，那么该任务就是I&#x2F;O-bound，I&#x2F;O束缚型。</p>
+<p>先来一个范围查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">&gt;</span> explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> stu <span class="keyword">where</span> age <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+-----------------------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> select_type <span class="operator">|</span> <span class="keyword">table</span> <span class="operator">|</span> type  <span class="operator">|</span> key  <span class="operator">|</span> key_len <span class="operator">|</span> <span class="keyword">ref</span>  <span class="operator">|</span> <span class="keyword">rows</span> <span class="operator">|</span> Extra                 <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+----------------+------+------+-----------------------+</span></span><br><span class="line"><span class="operator">|</span>  <span class="number">1</span> <span class="operator">|</span> SIMPLE      <span class="operator">|</span>  stu  <span class="operator">|</span> <span class="keyword">range</span> <span class="operator">|</span> age  <span class="operator">|</span> <span class="number">5</span>       <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span>  <span class="number">960</span> <span class="operator">|</span> <span class="keyword">Using</span> index <span class="keyword">condition</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+----------------+------+------+-----------------------+</span></span><br></pre></td></tr></table></figure>
 
 
 
-<p>第二种方式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AutoProxy</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Singer singer;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">getproxy</span><span class="params">(Singer singer)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.singer = singer;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">instance</span> <span class="operator">=</span> Proxy.newProxyInstance(singer.getClass().getClassLoader(), singer.getClass().getInterfaces(), <span class="built_in">this</span>);</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;前置通知&quot;</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">invoke</span> <span class="operator">=</span> method.invoke(singer);</span><br><span class="line">        System.out.println(<span class="string">&quot;后置通知&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> invoke;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Client端</span><br><span class="line"><span class="type">Star</span> <span class="variable">star</span> <span class="operator">=</span> (Star) <span class="keyword">new</span> <span class="title class_">AutoProxy</span>().getproxy(<span class="keyword">new</span> <span class="title class_">Singer</span>());</span><br><span class="line">star.show();</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/22013842/1665295583368-c97eafb9-3838-4733-8c90-5cfe68924877.jpeg" alt="img"></p>
+<p>图中的红线就是整个查询过程，蓝色线是磁盘的运动路线</p>
+<p>左边是字段age的二级索引，右边是存储完整行记录的地方（回表操作）。</p>
+<p>先到左边的二级索引找，找到第一条符合条件的记录，接着到右边去读取这条数据的完整记录，读取完后回到左边继续找下一条符合条件的记录，然后到右边读取，这时发现这条数据和上条数据在物理存储位置上离得非常远！</p>
+<p>为了读取记录只能让磁盘和磁头一起运动去读取这条记录。</p>
+<p>第三条，第四条，都是一样，每次读取数据，磁盘和磁头都要跑好远的路。</p>
+<p>MySQL是以页为单位读取数据的，这里假设这几条数据都恰好位于不同的页上，另外，页的思想来源于操作系统的非连续内存管理机制，类似的还有段。</p>
+<p>开启MRR重新执行SQL语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">&gt;</span> <span class="keyword">set</span> optimizer_switch<span class="operator">=</span><span class="string">&#x27;mrr=on&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.06</span> sec)</span><br><span class="line"></span><br><span class="line">mysql <span class="operator">&gt;</span> explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> stu <span class="keyword">where</span> age <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> select_type <span class="operator">|</span> <span class="keyword">table</span> <span class="operator">|</span> type  <span class="operator">|</span> key  <span class="operator">|</span> key_len <span class="operator">|</span> <span class="keyword">ref</span>  <span class="operator">|</span> <span class="keyword">rows</span> <span class="operator">|</span> Extra          <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="operator">|</span>  <span class="number">1</span> <span class="operator">|</span> SIMPLE      <span class="operator">|</span> tbl   <span class="operator">|</span> <span class="keyword">range</span> <span class="operator">|</span> age  <span class="operator">|</span>    <span class="number">5</span>    <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span>  <span class="number">960</span> <span class="operator">|</span> ...; <span class="keyword">Using</span> MRR <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+----------------+</span></span><br></pre></td></tr></table></figure>
 
-<p>第三种方式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GamePlayerIH</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">object</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">GamePlayerIH</span><span class="params">(Object object)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.object = object;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">getproxyInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(object.getClass().getClassLoader(),object.getClass().getInterfaces(), <span class="keyword">new</span> <span class="title class_">InvocationHandler</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">                <span class="keyword">if</span> (method.getName().equalsIgnoreCase(<span class="string">&quot;login&quot;</span>)) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;快上号看看!!!有人登录你的账号了！！！&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> method.invoke(object, args);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Client</span><br><span class="line">    </span><br><span class="line">    <span class="type">iGamePlayer</span> <span class="variable">gamePlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GamePlayer</span>(<span class="string">&quot;zs&quot;</span>);</span><br><span class="line">    <span class="type">GamePlayerIH</span> <span class="variable">gamePlayerIH</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GamePlayerIH</span>(gamePlayer);</span><br><span class="line">    <span class="type">iGamePlayer</span> <span class="variable">instance</span> <span class="operator">=</span> (iGamePlayer)gamePlayerIH.getproxyInstance();</span><br><span class="line">    instance.login(<span class="string">&quot;zs&quot;</span>,<span class="string">&quot;123&quot;</span>);</span><br><span class="line">    instance.killBoss();</span><br><span class="line">    instance.update();</span><br></pre></td></tr></table></figure>
-
-<p>参考博客</p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/mRambo/article/details/107447212" >动态代理<i class="fas fa-external-link-alt"></i></a></p>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6zby7qix3j30gp08oaao.jpg" alt="img"></p>
+<p>对于innodb，则会按照聚簇索引键值排好序，再顺序的读取聚簇索引。</p>
+<p>顺序读带来的好处</p>
+<ol>
+<li>磁盘和磁头不再来回的做机械运动</li>
+<li>可以充分使用磁盘预读。</li>
+</ol>
+<p>比如客户端请求一页的数据时，可以吧后面几页的数据也一起返回，放到数据缓冲池中，这样如果下次刚好需要下一页的数据，就不需要到磁盘读取，这样做的理论依据是计算机科学中著名的局部性原理</p>
+<blockquote>
+<p>当一个数据被用到时，其附近的数据也通常会马上被使用。</p>
+</blockquote>
+<ol start="3">
+<li>在一次查询中，每一页的数据只会从磁盘读取一次</li>
+</ol>
+<p>MySQL 从磁盘读取页的数据后，会把数据放到数据缓冲池，下次如果还用到这个页，就不需要去磁盘读取，直接从内存读。</p>
+<p>但是如果不排序，可能你在读取了第 1 页的数据后，会去读取第2、3、4页数据，接着你又要去读取第 1 页的数据，这时你发现第 1 页的数据，已经从缓存中被剔除了，于是又得再去磁盘读取第 1 页的数据。</p>
+<p>而转化为顺序读后，你会连续的使用第 1 页的数据，这时候按照 MySQL 的缓存剔除机制，这一页的缓存是不会失效的，直到你利用完这一页的数据，由于是顺序读，在这次查询的余下过程中，你确信不会再用到这一页的数据，可以和这一页数据说告辞了。</p>
+<p>索引本身就是为了减少磁盘IO，加快查询，MRR则是把索引减少磁盘IO的作用进一步放大。</p>
 
         </div>
 
@@ -245,29 +273,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/10/09/Redis%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">Redis多线程模型</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/10/06/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"
+                           href="/2022/10/09/AQS%E5%8E%9F%E7%90%86/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">微服务架构原理深度解析</span>
+                                <span class="post-nav-title-item">AQS原理</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
