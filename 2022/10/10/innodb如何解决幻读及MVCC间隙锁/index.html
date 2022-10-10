@@ -9,7 +9,7 @@
     
     <title>
         
-            Muti-Range Read（MRR）优化 |
+            innodb如何解决幻读及MVCC间隙锁 |
         
         Yl_blog
     </title>
@@ -168,7 +168,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">Muti-Range Read（MRR）优化</span>
+            <span class="title-hover-animation">innodb如何解决幻读及MVCC间隙锁</span>
         </div>
 
         
@@ -187,8 +187,8 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fas fa-edit"></i>&nbsp;
-        <span class="pc">2022-10-09 20:53:18</span>
-        <span class="mobile">2022-10-09 20:53</span>
+        <span class="pc">2022-10-10 19:56:27</span>
+        <span class="mobile">2022-10-10 19:56</span>
     </span>
     
         <span class="article-categories article-meta-item">
@@ -207,12 +207,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>924 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>496 Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>3 Mins</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>1 Mins</span>
         </span>
     
     
@@ -228,41 +228,22 @@
         
 
         <div class="article-content markdown-body">
-            <p>MySQL5.6版本开始支持MRR优化，目的是为了减少磁盘访问，并将磁盘随机访问转化为较为顺序的数据访问。这对IO-bound型的SQL查询语句可带来性能极大的提升。MRR优化可适用于range ref eq_ref类型的查询</p>
-<p>IO bound：如果主要时间消耗在等待读写数据而CPU利用率很低，那么该任务就是I&#x2F;O-bound，I&#x2F;O束缚型。</p>
-<p>先来一个范围查询</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">&gt;</span> explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> stu <span class="keyword">where</span> age <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+-----------------------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> select_type <span class="operator">|</span> <span class="keyword">table</span> <span class="operator">|</span> type  <span class="operator">|</span> key  <span class="operator">|</span> key_len <span class="operator">|</span> <span class="keyword">ref</span>  <span class="operator">|</span> <span class="keyword">rows</span> <span class="operator">|</span> Extra                 <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+----------------+------+------+-----------------------+</span></span><br><span class="line"><span class="operator">|</span>  <span class="number">1</span> <span class="operator">|</span> SIMPLE      <span class="operator">|</span>  stu  <span class="operator">|</span> <span class="keyword">range</span> <span class="operator">|</span> age  <span class="operator">|</span> <span class="number">5</span>       <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span>  <span class="number">960</span> <span class="operator">|</span> <span class="keyword">Using</span> index <span class="keyword">condition</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+----------------+------+------+-----------------------+</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6zc8ttvj6j30a1091wew.jpg" alt="img"></p>
-<p>图中的红线就是整个查询过程，蓝色线是磁盘的运动路线</p>
-<p>左边是字段age的二级索引，右边是存储完整行记录的地方（回表操作）。</p>
-<p>先到左边的二级索引找，找到第一条符合条件的记录，接着到右边去读取这条数据的完整记录，读取完后回到左边继续找下一条符合条件的记录，然后到右边读取，这时发现这条数据和上条数据在物理存储位置上离得非常远！</p>
-<p>为了读取记录只能让磁盘和磁头一起运动去读取这条记录。</p>
-<p>第三条，第四条，都是一样，每次读取数据，磁盘和磁头都要跑好远的路。</p>
-<p>MySQL是以页为单位读取数据的，这里假设这几条数据都恰好位于不同的页上，另外，页的思想来源于操作系统的非连续内存管理机制，类似的还有段。</p>
-<p>开启MRR重新执行SQL语句</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">&gt;</span> <span class="keyword">set</span> optimizer_switch<span class="operator">=</span><span class="string">&#x27;mrr=on&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.06</span> sec)</span><br><span class="line"></span><br><span class="line">mysql <span class="operator">&gt;</span> explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> stu <span class="keyword">where</span> age <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> select_type <span class="operator">|</span> <span class="keyword">table</span> <span class="operator">|</span> type  <span class="operator">|</span> key  <span class="operator">|</span> key_len <span class="operator">|</span> <span class="keyword">ref</span>  <span class="operator">|</span> <span class="keyword">rows</span> <span class="operator">|</span> Extra          <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="operator">|</span>  <span class="number">1</span> <span class="operator">|</span> SIMPLE      <span class="operator">|</span> tbl   <span class="operator">|</span> <span class="keyword">range</span> <span class="operator">|</span> age  <span class="operator">|</span>    <span class="number">5</span>    <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span>  <span class="number">960</span> <span class="operator">|</span> ...; <span class="keyword">Using</span> MRR <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-------+-------+------+---------+------+------+----------------+</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1h6zby7qix3j30gp08oaao.jpg" alt="img"></p>
-<p>对于innodb，则会按照聚簇索引键值排好序，再顺序的读取聚簇索引。</p>
-<p>顺序读带来的好处</p>
-<ol>
-<li>磁盘和磁头不再来回的做机械运动</li>
-<li>可以充分使用磁盘预读。</li>
-</ol>
-<p>比如客户端请求一页的数据时，可以吧后面几页的数据也一起返回，放到数据缓冲池中，这样如果下次刚好需要下一页的数据，就不需要到磁盘读取，这样做的理论依据是计算机科学中著名的局部性原理</p>
-<blockquote>
-<p>当一个数据被用到时，其附近的数据也通常会马上被使用。</p>
-</blockquote>
-<ol start="3">
-<li>在一次查询中，每一页的数据只会从磁盘读取一次</li>
-</ol>
-<p>MySQL 从磁盘读取页的数据后，会把数据放到数据缓冲池，下次如果还用到这个页，就不需要去磁盘读取，直接从内存读。</p>
-<p>但是如果不排序，可能你在读取了第 1 页的数据后，会去读取第2、3、4页数据，接着你又要去读取第 1 页的数据，这时你发现第 1 页的数据，已经从缓存中被剔除了，于是又得再去磁盘读取第 1 页的数据。</p>
-<p>而转化为顺序读后，你会连续的使用第 1 页的数据，这时候按照 MySQL 的缓存剔除机制，这一页的缓存是不会失效的，直到你利用完这一页的数据，由于是顺序读，在这次查询的余下过程中，你确信不会再用到这一页的数据，可以和这一页数据说告辞了。</p>
-<p>索引本身就是为了减少磁盘IO，加快查询，MRR则是把索引减少磁盘IO的作用进一步放大。</p>
+            <p>什么是MVCC</p>
+<p>如果读取的行正在执行DELETE或UPDATE，这时读取操作不会因此去等待行上锁的释放，相反的innodb存储引擎会读取行的一个快照数据。</p>
+<p>当前读和快照读</p>
+<p>当前读：读取的是最新的数据，而不是历史数据</p>
+<p>当前读是基于next-key lock（行锁+间隙锁）来实现的，使用insert，update，delete，select···for update，select···lock in share mode语句 以及加锁的select语句。</p>
+<p>快照读：读取的是快照数据，快照读是基于MVCC和undolog实现的，使用于简单的非阻塞的select语句，</p>
+<p>RR级别下：当前读是通过手动加record lock（行锁）和gap lock（间隙锁）来实现的。</p>
+<p>快照读在RR和RC隔离级别下的区别</p>
+<p>RC（Read Commited读已提交）</p>
+<p>在RC隔离级别下读取的是最新的数据</p>
+<p>事务中的每个Sql都会生成一个readView，一个事务内的多条SQL语句会生成多个readView，而每条sql执行的时候，都是查询最新的readView的值。</p>
+<p>比如说事务A有两次查询语句，在第一个查询 sql 生成一个 readView（事务视图 id &#x3D; n），事务 B 对该数据做了操作，那么就会生成新的 readView（事务视图 id &#x3D; n + 1），第二个查询 sql 语句获取该条数据时，就会去 readView（事务视图 id &#x3D; n + 1）查询数据。</p>
+<p>RR：事务开始的时候生成一个readView，所以一个事务内的多条查询sql，查询同一条数据时，读取到的readView都是同一个，那么查询某条数据的值也是同一个值。</p>
+<p>解决幻读</p>
+<p>在RR隔离级别下，MVCC下innodb解决了不可重复度和快照读情况下的幻读。当前读情况下的幻读问题需要靠next-key锁</p>
+<p>innodb对于当前读 行的查询采用next key锁，锁的不是单个值，而是一个范围（GAP）</p>
 
         </div>
 
@@ -273,29 +254,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/10/10/innodb%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%BB%E8%AF%BB%E5%8F%8AMVCC%E9%97%B4%E9%9A%99%E9%94%81/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">innodb如何解决幻读及MVCC间隙锁</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2022/10/09/AQS%E5%8E%9F%E7%90%86/"
+                           href="/2022/10/09/Muti-Range%20Read%EF%BC%88MRR%EF%BC%89%E4%BC%98%E5%8C%96/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">AQS原理</span>
+                                <span class="post-nav-title-item">Muti-Range Read（MRR）优化</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">

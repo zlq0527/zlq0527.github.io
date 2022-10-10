@@ -214,6 +214,50 @@
                 
 
                 <h3 class="home-article-title">
+                    <a href="/2022/10/10/innodb%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%BB%E8%AF%BB%E5%8F%8AMVCC%E9%97%B4%E9%9A%99%E9%94%81/">
+                        innodb如何解决幻读及MVCC间隙锁
+                    </a>
+                </h3>
+
+                <div class="home-article-content markdown-body">
+                    
+                        什么是MVCC
+如果读取的行正在执行DELETE或UPDATE，这时读取操作不会因此去等待行上锁的释放，相反的innodb存储引擎会读取行的一个快照数据。
+当前读和快照读
+当前读：读取的是最新的数据，而不是历史数据
+当前读是基于next-key lo...
+                    
+                </div>
+
+                <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon Oct 10 2022 19:56:27 GMT+0800">2022-10-10</span></span>
+        
+            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
+                <ul>
+                    
+                        <li>
+                            
+                            <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                        </li>
+                    
+                    
+                </ul>
+            </span>
+        
+        
+    </div>
+
+    <a href="/2022/10/10/innodb%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%BB%E8%AF%BB%E5%8F%8AMVCC%E9%97%B4%E9%9A%99%E9%94%81/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
+</div>
+
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                <h3 class="home-article-title">
                     <a href="/2022/10/09/Muti-Range%20Read%EF%BC%88MRR%EF%BC%89%E4%BC%98%E5%8C%96/">
                         Muti-Range Read（MRR）优化
                     </a>
@@ -557,52 +601,6 @@ p72
     </div>
 
     <a href="/2022/05/09/zookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
-</div>
-
-            </li>
-        
-            <li class="home-article-item">
-
-                
-
-                <h3 class="home-article-title">
-                    <a href="/2022/05/09/Zookeeper/">
-                        Zookeeper
-                    </a>
-                </h3>
-
-                <div class="home-article-content markdown-body">
-                    
-                        zookeeper是树形的目录服务,每个节点都被称为ZNode,每个节点都会保存自己的数据和节点信息
-
-节点可以拥有子节点,也允许少量数据存储在该节点下
-节点分为四大类
-PERSISTENT持久化节点
-EPHEMERAL 临时节点: -e
-PERSI...
-                    
-                </div>
-
-                <div class="home-article-meta-info-container">
-    <div class="home-article-meta-info">
-        <span><i class="fas fa-history"></i>&nbsp;<span class="home-article-date" data-date="Mon May 09 2022 18:04:40 GMT+0800">2022-05-09</span></span>
-        
-            <span class="home-article-category"><i class="fas fa-folder"></i>&nbsp;
-                <ul>
-                    
-                        <li>
-                            
-                            <a href="/categories/zookeeper/">zookeeper</a>&nbsp;
-                        </li>
-                    
-                    
-                </ul>
-            </span>
-        
-        
-    </div>
-
-    <a href="/2022/05/09/Zookeeper/">Read more&nbsp;<i class="fas fa-angle-right"></i></a>
 </div>
 
             </li>

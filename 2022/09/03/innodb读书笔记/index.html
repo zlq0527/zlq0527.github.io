@@ -240,7 +240,7 @@
 <p>binlog-cache-size是基于会话的，那如果syc-binlog设置为1，也即是同步写，这样的话binlog-cache-size还会用到吗？是不是事务开启的时候直接写入binlog磁盘了？</p>
 <p>p88</p>
 <p>binlog和redolog的区别</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7biwczjj20uc09rab6.jpg" alt="img"></p>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h70fqh8qfqj30qo0zk0yl.jpg" alt="img"></p>
 <p> 书上说的是二进制文件只在事务提交前进行提交。即只写磁盘一次，77页有一个参数sync-binlog如果是1的话，是同步写磁盘，为什么？</p>
 <h3 id="innodb缓冲池（buffer-pool）"><a href="#innodb缓冲池（buffer-pool）" class="headerlink" title="innodb缓冲池（buffer pool）"></a>innodb缓冲池（buffer pool）</h3><p>innodb缓冲池不仅缓冲索引，还缓冲行记录，自适应哈希索引，插入缓冲，锁，以及其他数据结构。</p>
 <p>很大的缓冲池面临的挑战：预热和关闭会话费更多的时间，如果很多脏页在缓冲池里，innodb关闭之前需要把脏页写会磁盘文件。也可以强制关闭，但重启的时候必须做更多的恢复工作。</p>
@@ -263,14 +263,7 @@
 <th>列2数据</th>
 </tr>
 </thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
+</table>
 <p>Null标志位记录的是可以为null列的空值情况。</p>
 <p>例如有四列，c1,c2,c3,c4</p>
 <p>c2不能为null，c2不参与null标志位</p>
@@ -369,7 +362,6 @@
 <p>这时再插入一条主键值为4的记录， 因为页中只能存放三条记录，所以不得不再申请一个新的页面：</p>
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bs7myxj20i40773z1.jpg" alt="img"></p>
 <p>新分配的数据页编号可能不是连续的，也就是说我们使用的这些页在存储空间里可能并不挨着，只是维护着一个上一页下一页的编号而建立的链表关系。此外，页10中最大的主键值是5，我们插入的主键值是4，这样就不符合下一个数据页的主键值大于上一个页中用户记录的主键值，所以插入主键值为4的记录伴随着一次记录移动，也就是把主键值为5的记录移动到28页中，然后把主键值为4的记录移动到页10中。</p>
-<p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bj4m9xj20qo0zk0yl.jpg" alt="img"></p>
 <p>这个过程表明了我们在对页中的记录进行增删查改操作的时候，必须通过一些比如记录移动的操作来保证这个状态一直成立：下一个数据页的主键值大于上一个页中用户记录的主键值。这个过程可以称之为页分裂。</p>
 <p>我们把每个页中用户记录最小的主键值，都筛选出来，用key表示，保存在自己定义的目录项中。</p>
 <p><img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5t7bn467kj20k00b3t9p.jpg" alt="img"></p>
